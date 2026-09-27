@@ -1,0 +1,44 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "iPhone 15 Pro",
+      "category": "Phone",
+      "price": 29000000,
+      "quantity": 10,
+      "active": true
+    },
+    {
+      "id": 2,
+      "name": "Samsung Galaxy S24 Ultra",
+      "category": "Phone",
+      "price": 27000000,
+      "quantity": 15,
+      "active": true
+    },
+    {
+      "id": 3,
+      "name": "Dell XPS 13",
+      "category": "Laptop",
+      "price": 35000000,
+      "quantity": 5,
+      "active": false
+    },
+    {
+      "id": 4,
+      "name": "Logitech MX Master 3S",
+      "category": "Accessory",
+      "price": 2500000,
+      "quantity": 20,
+      "active": true
+    },
+    {
+      "id": 5,
+      "name": "Sony WH-1000XM5",
+      "category": "Audio",
+      "price": 8450000,
+      "quantity": 12,
+      "active": true
+    }
+  ]
+}

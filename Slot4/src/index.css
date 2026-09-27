@@ -1,0 +1,23 @@
+:root {
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  color-scheme: dark;
+}
+
+body {
+  background-color: #121212;
+  color: #e0e0e0;
+  min-height: 100vh;
+}
+
+.hover-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5) !important;
+}
+
+.bg-gradient-dark {
+  background: linear-gradient(135deg, #1e1e24 0%, #0a0a0c 100%);
+}
