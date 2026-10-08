@@ -30,6 +30,7 @@
 | **Slot 16** | REST API Testing with MockMvc | `Slot16/slot16-testing-mockmvc/` | MockMvc, JUnit 5, Mockito, @DataJpaTest | ✅ 12/12 Tests PASS |
 | **Slot 17** | FUNews JPA Domain Entities & Repository | `Slot17/slot17-funews-demo/` | Spring Boot 3, Java 21, JPA, H2, 1-N Mapping | ✅ Build Success |
 | **Slot 18** | Orchid JPA REST API (Lab 04) | `Slot18/slot18-orchid-jpa-rest-lab/` | Spring Boot 3, Java 21, JPA, SQL Server, 3-Layer CRUD | ✅ Build Success |
+| **Slot 20** | Full Stack: React SPA + Spring Boot REST API | `Slot20/demo_slot20/` | React, Spring Boot 3, CORS, Axios, SQL Server | ✅ Verified |
 
 ---
 
@@ -343,6 +344,29 @@
     - Chuỗi kết nối: `jdbc:sqlserver://localhost:1433;databaseName=OrchidDB;encrypt=true;trustServerCertificate=true`.
     - Cấu hình Hibernate tự động cập nhật cấu trúc bảng (`ddl-auto=update`), format log SQL.
 - **Cách chạy:** `cd Slot18/slot18-orchid-jpa-rest-lab && mvn spring-boot:run`.
+
+---
+
+### 18. Slot 20 - Integrate React SPA with Spring Boot REST API
+- **Thư mục:** `Slot20/demo_slot20/` (gồm 2 phần `frontend` & `backend`)
+- **Dự án:** **Full-Stack Orchid Management Integration with CORS**
+- **Công nghệ:** React 19, Vite, Axios, Spring Boot 3.2.4, Spring Data JPA, Microsoft SQL Server, CORS Configuration.
+- **Thành phần & Tính năng:**
+  - **Tầng Backend (`demo_slot20/backend`)**:
+    - Cấu hình chia sẻ tài nguyên nguồn gốc chéo (**CORS**) qua `WebConfig.java` cho phép frontend `http://localhost:5173` gọi API (`GET`, `POST`, `PUT`, `DELETE`, `OPTIONS`).
+    - Cung cấp toàn bộ REST endpoints hoa lan tại `/api/orchids`.
+    - Kết nối cơ sở dữ liệu SQL Server `OrchidDB`.
+  - **Tầng Frontend (`demo_slot20/frontend`)**:
+    - `httpClient.js`: Khởi tạo instance Axios tập trung với `baseURL` từ biến môi trường `VITE_API_BASE_URL` (mặc định `http://localhost:8080/api`) và timeout 10 giây.
+    - `orchidApi.js`: Module hóa toàn bộ các hàm gọi API backend (`getOrchids`, `getOrchid`, `createOrchid`, `updateOrchid`, `deleteOrchid`).
+    - `ListOfOrchids.jsx`: Component bất đồng bộ trong `useEffect` với cờ `active` ngăn chặn race condition/memory leak khi unmount, xử lý đầy đủ các trạng thái `Loading...`, `Error: ...`, `No orchids found.` và hiển thị danh sách hoa lan trực tiếp từ Backend.
+- **Cách chạy:**
+  ```bash
+  # 1. Chạy Backend:
+  cd Slot20/demo_slot20/backend && mvn spring-boot:run
+  # 2. Chạy Frontend:
+  cd Slot20/demo_slot20/frontend && npm install && npm run dev
+  ```
 
 ---
 
