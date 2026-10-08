@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 60" width="240" height="60" fill="none">
+  <defs>
+    <linearGradient id="fuGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5" />
+      <stop offset="50%" stop-color="#06b6d4" />
+      <stop offset="100%" stop-color="#10b981" />
+    </linearGradient>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Logo Icon Badge -->
+  <g transform="translate(6, 6)">
+    <rect x="0" y="0" width="48" height="48" rx="14" fill="url(#shieldGrad)" />
+    <!-- Newspaper / Innovation Graphic -->
+    <path d="M12 15C12 13.8954 12.8954 13 14 13H32C33.1046 13 34 13.8954 34 15V33C34 34.1046 33.1046 35 32 35H16C13.7909 35 12 33.2091 12 31V15Z" fill="#ffffff" fill-opacity="0.95"/>
+    <path d="M17 19H29" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M17 24H27" stroke="#3b82f6" stroke-width="2" stroke-linecap="round"/>
+    <path d="M17 29H23" stroke="#3b82f6" stroke-width="2" stroke-linecap="round"/>
+    <!-- AI Sparkle Indicator -->
+    <circle cx="36" cy="12" r="4" fill="#fbbf24" filter="url(#glow)"/>
+    <polygon points="36,7 37.5,10.5 41,12 37.5,13.5 36,17 34.5,13.5 31,12 34.5,10.5" fill="#f59e0b"/>
+  </g>
+
+  <!-- Typography: FU NEWS MANAGEMENT -->
+  <text x="64" y="29" font-family="'Inter', -apple-system, BlinkMacSystemFont, sans-serif" font-weight="800" font-size="20" letter-spacing="-0.5" fill="#ffffff">
+    FU<tspan fill="#38bdf8">NEWS</tspan>
+  </text>
+  <text x="65" y="44" font-family="'Inter', -apple-system, BlinkMacSystemFont, sans-serif" font-weight="600" font-size="9" letter-spacing="1.8" fill="#94a3b8">
+    MANAGEMENT SYSTEM
+  </text>
+</svg>

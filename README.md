@@ -12,6 +12,7 @@
 
 | Slot / Lab | Dự Án / Bài Thực Hành | Thư Mục | Công Nghệ Chính | Trạng Thái |
 | :--- | :--- | :--- | :--- | :--- |
+| **Assignment 01** | FUNewsManagementSystem Admin Portal | `LamDangKyAnh_SE1910/` | React 18, Vite, CRUD + Search, Modal, Auth | ✅ Build Success (Full Scope) |
 | **Slot 02** | ReactJS Fundamentals Dashboard | `Slot2/` | React 18, Vite, JSX, Components | ✅ Build Success |
 | **Slot 03** | Orchid Explorer Dashboard | `Slot3/` | React 18, React-Bootstrap, Bootstrap 5 | ✅ Build Success |
 | **Slot 04** | Interactive Orchid Explorer | `Slot4/` | React 18, Props, State, Context API | ✅ Build Success |
@@ -27,10 +28,32 @@
 | **Slot 14** | OpenAPI / Swagger Documentation | `Slot14/slot14-openapi-demo/` | Spring Boot 3, Springdoc OpenAPI 3, UI | ✅ Build Success |
 | **Slot 15** | Versioning, Paging & Sorting | `Slot15/slot15-news-paging-api/` | Spring Data JPA, H2, Page/Slice, Versioning | ✅ Build Success |
 | **Slot 16** | REST API Testing with MockMvc | `Slot16/slot16-testing-mockmvc/` | MockMvc, JUnit 5, Mockito, @DataJpaTest | ✅ 12/12 Tests PASS |
+| **Slot 17** | FUNews JPA Domain Entities & Repository | `Slot17/slot17-funews-demo/` | Spring Boot 3, Java 21, JPA, H2, 1-N Mapping | ✅ Build Success |
 
 ---
 
 ## 🚀 Chi Tiết Các Bài Thực Hành Theo Slot & Lab
+
+### 0. Assignment 01 - FUNewsManagementSystem Admin Portal
+- **Thư mục:** `LamDangKyAnh_SE1910/`
+- **Công nghệ:** React 18, Vite, React-Bootstrap, Bootstrap 5, LocalStorage Persistence.
+- **Tài khoản kiểm thử:** `Admin` / `Admin` (Toàn quyền quản trị), `Staff` / `Staff` (Biên tập viên).
+- **Thành phần & Tính năng:**
+  - `LoginPage.jsx`: Đăng nhập phân quyền với form kiểm soát (controlled inputs), xác thực lỗi và nút bấm điền nhanh tiện lợi cho chấm bài.
+  - `AdminLayout.jsx`: Master layout chuẩn SaaS kết hợp Header, Sidebar và vùng hiển thị nội dung động.
+  - `Sidebar.jsx`: Logo AI vector, menu điều hướng 5 phân vùng (`Dashboard`, `Category`, `News`, `Users`, `Settings`), trạng thái active mượt mà.
+  - `Header.jsx`: Chuyển đổi theme Sáng/Tối, hiển thị avatar + role badge, nút đăng xuất an toàn.
+  - `DashboardPage.jsx`: 4 thẻ thống kê tổng quan (bài báo, danh mục, người dùng, hệ thống), danh sách tin mới và thao tác nhanh.
+  - `CategoryManagement.jsx` & `CategoryModal.jsx`: Toàn diện CRUD + Tìm kiếm danh mục, modal thêm/sửa, dialog xác nhận xóa.
+  - `NewsManagement.jsx` & `NewsModal.jsx`: Toàn diện CRUD + Tìm kiếm bài báo, dropdown danh mục, trạng thái xuất bản, nhãn tags.
+  - `UserManagement.jsx` & `UserModal.jsx`: Toàn diện CRUD + Tìm kiếm người dùng, phân quyền Admin/Staff, cơ chế bảo vệ không xóa chính mình.
+  - `SettingsPage.jsx`: Hồ sơ cá nhân, tùy chỉnh Dark/Light mode, nút khôi phục dữ liệu mẫu ban đầu (Reset Seed Data).
+  - `DeleteConfirmModal.jsx`: Hộp thoại xác nhận xóa độc lập, đảm bảo an toàn dữ liệu.
+  - `storageService.js`: Lớp dịch vụ quản lý đọc/ghi `localStorage`, không mất dữ liệu khi tải lại trang (F5).
+- **Kiểm thử & Báo cáo:** Tài liệu `LamDangKyAnh_SE1910/README.md` đầy đủ 35 test cases đạt 100% PASS, 3 debug logs, nhật ký dùng AI và hướng dẫn trả lời phỏng vấn theo rubric 10.0.
+- **Cách chạy:** `cd LamDangKyAnh_SE1910 && npm install && npm run dev` (Kiểm tra build: `npm run build`).
+
+---
 
 ### 1. Slot 02 - ReactJS Fundamentals & Component Composition
 - **Thư mục:** `Slot2/`
@@ -274,6 +297,32 @@
   # hoặc trên Windows:
   mvnw.cmd clean test
   ```
+
+---
+
+### 16. Slot 17 - FUNews JPA Entity Mapping & Relationship Demo
+- **Thư mục:** `Slot17/slot17-funews-demo/`
+- **Dự án:** **FUNews JPA Domain Entities & Repository Demo**
+- **Công nghệ:** Java 21, Spring Boot 3.2.4, Spring Data JPA, H2 Database, Maven.
+- **Thành phần & Tính năng:**
+  - **Entity `Category` (`categories`)**:
+    - Khóa chính tự tăng `@Id @GeneratedValue(strategy = GenerationType.IDENTITY)`.
+    - Ràng buộc thuộc tính: `name` không rỗng và duy nhất (`nullable = false, unique = true`), `description`, `active`.
+    - Quan hệ 1-Nhiều hai chiều: `@OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)`.
+    - Phương thức helper đồng bộ quan hệ: `addNews(News news)` và `removeNews(News news)`.
+  - **Entity `News` (`news`)**:
+    - Thuộc tính tiêu đề: `title` giới hạn 200 ký tự, không rỗng.
+    - Quan hệ Nhiều-1: `@ManyToOne(fetch = FetchType.LAZY, optional = false)` kết hợp `@JoinColumn(name = "category_id", nullable = false)`.
+  - **`CategoryRepository`**:
+    - Kế thừa `JpaRepository<Category, Long>`.
+    - Derived query methods: `findByNameIgnoreCase`, `existsByNameIgnoreCase`, `findByActiveTrueOrderByNameAsc`.
+  - **`CategoryService`**:
+    - Quản lý giao dịch với `@Transactional`.
+    - Nghiệp vụ `createCategory`: Chuẩn hóa dữ liệu đầu vào (`trim()`), validate tên bắt buộc và kiểm tra không trùng lặp tên danh mục.
+    - Nghiệp vụ `getActiveCategories`: `@Transactional(readOnly = true)` tối ưu hóa hiệu năng truy vấn.
+  - **Cơ sở dữ liệu H2**:
+    - Cấu hình `application.properties`: In-memory database `jdbc:h2:mem:funewsdb`, `create-drop`, hiển thị và format câu lệnh Hibernate SQL, H2 Web Console tại `/h2-console`.
+- **Cách chạy:** `cd Slot17/slot17-funews-demo && mvn spring-boot:run`.
 
 ---
 
