@@ -29,6 +29,7 @@
 | **Slot 15** | Versioning, Paging & Sorting | `Slot15/slot15-news-paging-api/` | Spring Data JPA, H2, Page/Slice, Versioning | ✅ Build Success |
 | **Slot 16** | REST API Testing with MockMvc | `Slot16/slot16-testing-mockmvc/` | MockMvc, JUnit 5, Mockito, @DataJpaTest | ✅ 12/12 Tests PASS |
 | **Slot 17** | FUNews JPA Domain Entities & Repository | `Slot17/slot17-funews-demo/` | Spring Boot 3, Java 21, JPA, H2, 1-N Mapping | ✅ Build Success |
+| **Slot 18** | Orchid JPA REST API (Lab 04) | `Slot18/slot18-orchid-jpa-rest-lab/` | Spring Boot 3, Java 21, JPA, SQL Server, 3-Layer CRUD | ✅ Build Success |
 
 ---
 
@@ -323,6 +324,25 @@
   - **Cơ sở dữ liệu H2**:
     - Cấu hình `application.properties`: In-memory database `jdbc:h2:mem:funewsdb`, `create-drop`, hiển thị và format câu lệnh Hibernate SQL, H2 Web Console tại `/h2-console`.
 - **Cách chạy:** `cd Slot17/slot17-funews-demo && mvn spring-boot:run`.
+
+---
+
+### 17. Slot 18 - Orchid JPA REST API (Lab 04)
+- **Thư mục:** `Slot18/slot18-orchid-jpa-rest-lab/`
+- **Dự án:** **Orchid Management RESTful API with JPA & SQL Server**
+- **Công nghệ:** Java 21, Spring Boot 3.2.4, Spring Data JPA, Microsoft SQL Server (`mssql-jdbc`), Maven.
+- **Thành phần & Tính năng:**
+  - **Kiến trúc 3 tầng chuẩn mực (3-Layer Pattern)**:
+    - `OrchidController`: Tầng trình diễn tiếp nhận HTTP requests (`GET`, `POST`, `PUT`, `DELETE`), ánh xạ mã trạng thái chuẩn (`200 OK`, `201 Created`, `204 No Content`, `400 Bad Request`, `404 Not Found`).
+    - `IOrchidService` & `OrchidService`: Tầng nghiệp vụ với `@Transactional`, xử lý kiểm tra validation tên hoa lan (bắt buộc, không để trống) và kiểm tra sự tồn tại của danh mục liên kết qua `resolveCategory`.
+    - `IOrchidRepository` & `IOrchidCategoryRepository`: Tầng truy xuất dữ liệu Spring Data JPA, hỗ trợ tìm kiếm theo tên không phân biệt hoa thường (`findByOrchidNameContainingIgnoreCase`).
+  - **Thực thể dữ liệu (Domain Entities)**:
+    - `Orchid`: Bảng `orchids` với các trường `orchidID`, `orchidName`, `isNatural`, `orchidDescription`, `isAttractive`, `orchidURL`, khóa ngoại `@ManyToOne` liên kết với danh mục.
+    - `OrchidCategory`: Bảng `orchid_categories` với `categoryId`, `categoryName`, `@OneToMany` ánh xạ danh sách hoa lan, gắn `@JsonIgnore` chống tuần hoàn vô hạn khi xuất dữ liệu JSON.
+  - **Cơ sở dữ liệu Microsoft SQL Server**:
+    - Chuỗi kết nối: `jdbc:sqlserver://localhost:1433;databaseName=OrchidDB;encrypt=true;trustServerCertificate=true`.
+    - Cấu hình Hibernate tự động cập nhật cấu trúc bảng (`ddl-auto=update`), format log SQL.
+- **Cách chạy:** `cd Slot18/slot18-orchid-jpa-rest-lab && mvn spring-boot:run`.
 
 ---
 
