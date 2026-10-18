@@ -11,24 +11,24 @@ public class Orchid {
     @Column(name = "OrchidID")
     private Integer orchidId;
 
-    @Column(name = "OrchidName", nullable = false)
+    @Column(name = "OrchidName", columnDefinition = "NVARCHAR(255)", nullable = false)
     private String orchidName;
 
     @JsonProperty("natural")
     @Column(name = "IsNatural", nullable = false)
     private boolean isNatural;
 
-    @Column(name = "OrchidDescription", length = 1000)
+    @Column(name = "OrchidDescription", columnDefinition = "NVARCHAR(1000)")
     private String orchidDescription;
 
-    @Column(name = "OrchidCategory")
+    @Column(name = "OrchidCategory", columnDefinition = "NVARCHAR(255)")
     private String orchidCategory;
 
     @JsonProperty("attractive")
     @Column(name = "IsAttractive", nullable = false)
     private boolean isAttractive;
 
-    @Column(name = "OrchidURL", length = 1000)
+    @Column(name = "OrchidURL", columnDefinition = "NVARCHAR(1000)")
     private String orchidURL;
 
     public Orchid() {
