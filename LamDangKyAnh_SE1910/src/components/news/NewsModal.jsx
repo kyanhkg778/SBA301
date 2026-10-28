@@ -1,42 +1,51 @@
 import { useState, useEffect } from "react";
 import { Modal, Button, Form, Alert, Row, Col } from "react-bootstrap";
 
-export default function NewsModal({ show, mode, newsItem, categories, currentUser, onSave, onClose }) {
-  const [formData, setFormData] = useState({
-    title: "",
-    content: "",
-    categoryId: "",
-    status: 1,
-    tagsInput: "",
-    createdBy: ""
-  });
-  const [error, setError] = useState("");
+const DEFAULT_FORM = {
+  title: "",
+  content: "",
+  categoryId: "",
+  status: 1,
+  tagsInput: "",
+  createdBy: "Admin"
+};
 
+export default function NewsModal({
+  show,
+  mode,
+  newsItem,
+  categories,
+  currentUser,
+  onSave,
+  onClose
+}) {
+  const [formData, setFormData] = useState(DEFAULT_FORM);
+  const [error, setError] = useState("");
+  const isUpdate = mode === "update";
+
+  // Đồng bộ dữ liệu vào Form khi mở Modal
   useEffect(() => {
-    if (show) {
-      if (mode === "update" && newsItem) {
-        setFormData({
-          title: newsItem.title || "",
-          content: newsItem.content || "",
-          categoryId: newsItem.categoryId !== undefined ? String(newsItem.categoryId) : "",
-          status: newsItem.status !== undefined ? Number(newsItem.status) : 1,
-          tagsInput: Array.isArray(newsItem.tags) ? newsItem.tags.join(", ") : "",
-          createdBy: newsItem.createdBy || currentUser?.username || "Admin"
-        });
-      } else {
-        const defaultCatId = categories.length > 0 ? String(categories[0].id) : "";
-        setFormData({
-          title: "",
-          content: "",
-          categoryId: defaultCatId,
-          status: 1,
-          tagsInput: "",
-          createdBy: currentUser?.username || "Admin"
-        });
-      }
-      setError("");
+    if (!show) return;
+
+    const defaultAuthor = currentUser?.username || "Admin";
+    if (isUpdate && newsItem) {
+      setFormData({
+        title: newsItem.title || "",
+        content: newsItem.content || "",
+        categoryId: newsItem.categoryId !== undefined ? String(newsItem.categoryId) : "",
+        status: newsItem.status !== undefined ? Number(newsItem.status) : 1,
+        tagsInput: Array.isArray(newsItem.tags) ? newsItem.tags.join(", ") : "",
+        createdBy: newsItem.createdBy || defaultAuthor
+      });
+    } else {
+      setFormData({
+        ...DEFAULT_FORM,
+        categoryId: categories.length > 0 ? String(categories[0].id) : "",
+        createdBy: defaultAuthor
+      });
     }
-  }, [show, mode, newsItem, categories, currentUser]);
+    setError("");
+  }, [show, isUpdate, newsItem, categories, currentUser]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,6 +56,7 @@ export default function NewsModal({ show, mode, newsItem, categories, currentUse
     if (error) setError("");
   };
 
+  // Kiểm tra dữ liệu hợp lệ và tách chuỗi tags thành mảng trước khi lưu
   const handleSubmit = (e) => {
     e.preventDefault();
     const trimmedTitle = formData.title.trim();
@@ -56,21 +66,20 @@ export default function NewsModal({ show, mode, newsItem, categories, currentUse
       setError("Tiêu đề bài báo không được để trống (Title is required).");
       return;
     }
-
     if (!trimmedContent) {
       setError("Nội dung bài báo không được để trống (Content is required).");
       return;
     }
-
     if (!formData.categoryId) {
       setError("Vui lòng chọn danh mục cho bài báo (Category is required).");
       return;
     }
 
+    // Chuyển đổi chuỗi tags cách nhau bằng dấu phẩy thành mảng (Array)
     const tagsArray = formData.tagsInput
       .split(",")
-      .map((t) => t.trim())
-      .filter((t) => t.length > 0);
+      .map((tag) => tag.trim())
+      .filter(Boolean);
 
     onSave({
       title: trimmedTitle,
@@ -78,19 +87,20 @@ export default function NewsModal({ show, mode, newsItem, categories, currentUse
       categoryId: Number(formData.categoryId),
       status: Number(formData.status),
       tags: tagsArray,
-      createdBy: formData.createdBy || "Admin"
+      createdBy: formData.createdBy.trim() || "Admin"
     });
   };
-
-  const isUpdate = mode === "update";
 
   return (
     <Modal show={show} onHide={onClose} centered size="lg" backdrop="static">
       <Modal.Header closeButton>
         <Modal.Title className="fw-bold fs-5">
-          {isUpdate ? "✏️ Cập Nhật Bài Báo (Update News Article)" : "➕ Soạn Bài Báo Mới (Create News Article)"}
+          {isUpdate
+            ? "✏️ Cập Nhật Bài Báo (Update News Article)"
+            : "➕ Soạn Bài Báo Mới (Create News Article)"}
         </Modal.Title>
       </Modal.Header>
+
       <Form onSubmit={handleSubmit}>
         <Modal.Body className="d-flex flex-column gap-3">
           {error && <Alert variant="danger" className="py-2 small">{error}</Alert>}
@@ -106,7 +116,7 @@ export default function NewsModal({ show, mode, newsItem, categories, currentUse
               value={formData.title}
               onChange={handleChange}
               autoFocus
-              isInvalid={!!error && !formData.title.trim()}
+              isInvalid={Boolean(error) && !formData.title.trim()}
             />
             <Form.Control.Feedback type="invalid">
               Vui lòng nhập tiêu đề bài báo.
@@ -119,11 +129,7 @@ export default function NewsModal({ show, mode, newsItem, categories, currentUse
                 <Form.Label className="small fw-semibold">
                   Danh Mục (Category) <span className="text-danger">*</span>
                 </Form.Label>
-                <Form.Select
-                  name="categoryId"
-                  value={formData.categoryId}
-                  onChange={handleChange}
-                >
+                <Form.Select name="categoryId" value={formData.categoryId} onChange={handleChange}>
                   <option value="">-- Chọn danh mục --</option>
                   {categories.map((cat) => (
                     <option key={cat.id} value={cat.id}>
@@ -137,11 +143,7 @@ export default function NewsModal({ show, mode, newsItem, categories, currentUse
             <Col md={6}>
               <Form.Group controlId="newsStatus">
                 <Form.Label className="small fw-semibold">Trạng Thái Xuất Bản (Status)</Form.Label>
-                <Form.Select
-                  name="status"
-                  value={formData.status}
-                  onChange={handleChange}
-                >
+                <Form.Select name="status" value={formData.status} onChange={handleChange}>
                   <option value={1}>🟢 Xuất bản (Active / Published - 1)</option>
                   <option value={0}>⚪ Bản nháp (Inactive / Draft - 0)</option>
                 </Form.Select>
@@ -160,7 +162,7 @@ export default function NewsModal({ show, mode, newsItem, categories, currentUse
               placeholder="Nhập toàn văn nội dung bài báo, thông cáo báo chí hoặc thông tin sự kiện..."
               value={formData.content}
               onChange={handleChange}
-              isInvalid={!!error && !formData.content.trim()}
+              isInvalid={Boolean(error) && !formData.content.trim()}
             />
             <Form.Control.Feedback type="invalid">
               Vui lòng nhập nội dung bài báo.
@@ -170,7 +172,9 @@ export default function NewsModal({ show, mode, newsItem, categories, currentUse
           <Row>
             <Col md={6}>
               <Form.Group controlId="newsTags">
-                <Form.Label className="small fw-semibold">Tags (Nhãn phân loại, cách nhau bằng dấu phẩy)</Form.Label>
+                <Form.Label className="small fw-semibold">
+                  Tags (Nhãn phân loại, cách nhau bằng dấu phẩy)
+                </Form.Label>
                 <Form.Control
                   type="text"
                   name="tagsInput"
@@ -183,7 +187,9 @@ export default function NewsModal({ show, mode, newsItem, categories, currentUse
 
             <Col md={6}>
               <Form.Group controlId="newsAuthor">
-                <Form.Label className="small fw-semibold">Tác Giả (Created By / Author)</Form.Label>
+                <Form.Label className="small fw-semibold">
+                  Tác Giả (Created By / Author)
+                </Form.Label>
                 <Form.Control
                   type="text"
                   name="createdBy"

@@ -1,33 +1,34 @@
 import { useState, useEffect } from "react";
 import { Modal, Button, Form, Alert } from "react-bootstrap";
 
+const DEFAULT_FORM = {
+  name: "",
+  description: "",
+  status: 1
+};
+
 export default function CategoryModal({ show, mode, category, onSave, onClose }) {
-  const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    status: 1
-  });
+  const [formData, setFormData] = useState(DEFAULT_FORM);
   const [error, setError] = useState("");
+  const isUpdate = mode === "update";
 
+  // Đồng bộ dữ liệu vào Form mỗi khi mở Modal
   useEffect(() => {
-    if (show) {
-      if (mode === "update" && category) {
-        setFormData({
-          name: category.name || "",
-          description: category.description || "",
-          status: category.status !== undefined ? Number(category.status) : 1
-        });
-      } else {
-        setFormData({
-          name: "",
-          description: "",
-          status: 1
-        });
-      }
-      setError("");
-    }
-  }, [show, mode, category]);
+    if (!show) return;
 
+    if (isUpdate && category) {
+      setFormData({
+        name: category.name || "",
+        description: category.description || "",
+        status: category.status !== undefined ? Number(category.status) : 1
+      });
+    } else {
+      setFormData(DEFAULT_FORM);
+    }
+    setError("");
+  }, [show, isUpdate, category]);
+
+  // Xử lý thay đổi giá trị các ô nhập liệu (Controlled Inputs)
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -37,6 +38,7 @@ export default function CategoryModal({ show, mode, category, onSave, onClose })
     if (error) setError("");
   };
 
+  // Kiểm tra hợp lệ (Validation) và gửi dữ liệu lên component cha
   const handleSubmit = (e) => {
     e.preventDefault();
     const trimmedName = formData.name.trim();
@@ -53,8 +55,6 @@ export default function CategoryModal({ show, mode, category, onSave, onClose })
     });
   };
 
-  const isUpdate = mode === "update";
-
   return (
     <Modal show={show} onHide={onClose} centered backdrop="static">
       <Modal.Header closeButton>
@@ -62,6 +62,7 @@ export default function CategoryModal({ show, mode, category, onSave, onClose })
           {isUpdate ? "✏️ Cập Nhật Danh Mục (Update Category)" : "➕ Thêm Danh Mục Mới (Create Category)"}
         </Modal.Title>
       </Modal.Header>
+
       <Form onSubmit={handleSubmit}>
         <Modal.Body className="d-flex flex-column gap-3">
           {error && <Alert variant="danger" className="py-2 small">{error}</Alert>}
@@ -84,7 +85,7 @@ export default function CategoryModal({ show, mode, category, onSave, onClose })
               value={formData.name}
               onChange={handleChange}
               autoFocus
-              isInvalid={!!error && !formData.name.trim()}
+              isInvalid={Boolean(error) && !formData.name.trim()}
             />
             <Form.Control.Feedback type="invalid">
               Vui lòng nhập tên danh mục.
@@ -105,11 +106,7 @@ export default function CategoryModal({ show, mode, category, onSave, onClose })
 
           <Form.Group controlId="categoryStatus">
             <Form.Label className="small fw-semibold">Trạng Thái (Status)</Form.Label>
-            <Form.Select
-              name="status"
-              value={formData.status}
-              onChange={handleChange}
-            >
+            <Form.Select name="status" value={formData.status} onChange={handleChange}>
               <option value={1}>🟢 Kích hoạt (Active - 1)</option>
               <option value={0}>⚪ Tạm ẩn / Không kích hoạt (Inactive - 0)</option>
             </Form.Select>

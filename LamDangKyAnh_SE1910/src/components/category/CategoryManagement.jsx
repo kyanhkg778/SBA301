@@ -1,30 +1,35 @@
 import { useState } from "react";
-import { Button, Form, InputGroup, Table, Alert, Badge } from "react-bootstrap";
+import { Button, Form, InputGroup, Alert, Badge } from "react-bootstrap";
 import CategoryModal from "./CategoryModal";
 import DeleteConfirmModal from "../common/DeleteConfirmModal";
 
-export default function CategoryManagement({ categories, onAddCategory, onUpdateCategory, onDeleteCategory, news = [] }) {
+// Trạng thái mặc định của hộp thoại Thêm/Sửa
+const INITIAL_MODAL_STATE = { show: false, mode: "create", category: null };
+
+export default function CategoryManagement({
+  categories,
+  onAddCategory,
+  onUpdateCategory,
+  onDeleteCategory,
+  news = []
+}) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [modalState, setModalState] = useState({ show: false, mode: "create", category: null });
-  const [deleteConfirm, setDeleteConfirm] = useState({ show: false, category: null });
+  const [modalState, setModalState] = useState(INITIAL_MODAL_STATE);
+  const [deleteTarget, setDeleteTarget] = useState(null);
   const [alertInfo, setAlertInfo] = useState(null);
 
+  // Hiển thị thông báo (Toast Alert) tự động ẩn sau 3.5 giây
   const showAlert = (message, variant = "success") => {
     setAlertInfo({ message, variant });
     setTimeout(() => setAlertInfo(null), 3500);
   };
 
-  // Open Create Dialog
-  const handleOpenCreate = () => {
-    setModalState({ show: true, mode: "create", category: null });
-  };
+  // Mở Modal ở chế độ Thêm mới (Create) hoặc Cập nhật (Update)
+  const handleOpenCreate = () => setModalState({ show: true, mode: "create", category: null });
+  const handleOpenEdit = (category) => setModalState({ show: true, mode: "update", category });
+  const handleCloseModal = () => setModalState(INITIAL_MODAL_STATE);
 
-  // Open Update Dialog
-  const handleOpenEdit = (category) => {
-    setModalState({ show: true, mode: "update", category });
-  };
-
-  // Save (Create or Update)
+  // Lưu dữ liệu từ Modal (phân nhánh theo mode)
   const handleSaveModal = (categoryData) => {
     if (modalState.mode === "create") {
       onAddCategory(categoryData);
@@ -33,52 +38,49 @@ export default function CategoryManagement({ categories, onAddCategory, onUpdate
       onUpdateCategory(modalState.category.id, categoryData);
       showAlert(`Đã cập nhật danh mục "${categoryData.name}" thành công!`);
     }
-    setModalState({ show: false, mode: "create", category: null });
+    handleCloseModal();
   };
 
-  // Open Delete Confirmation
-  const handleOpenDelete = (category) => {
-    setDeleteConfirm({ show: true, category });
-  };
-
-  // Confirm Delete
+  // Xác nhận xóa Danh mục (kèm kiểm tra số bài báo đang tham chiếu categoryId)
   const handleConfirmDelete = () => {
-    if (deleteConfirm.category) {
-      const catId = deleteConfirm.category.id;
-      const associatedNewsCount = news.filter((n) => Number(n.categoryId) === Number(catId)).length;
-      
-      onDeleteCategory(catId);
-      if (associatedNewsCount > 0) {
-        showAlert(
-          `Đã xóa danh mục "${deleteConfirm.category.name}". Lưu ý: có ${associatedNewsCount} bài báo liên quan cần cập nhật lại danh mục.`,
-          "warning"
-        );
-      } else {
-        showAlert(`Đã xóa danh mục "${deleteConfirm.category.name}" thành công!`);
-      }
+    if (!deleteTarget) return;
+
+    const associatedNewsCount = news.filter(
+      (n) => Number(n.categoryId) === Number(deleteTarget.id)
+    ).length;
+
+    onDeleteCategory(deleteTarget.id);
+
+    if (associatedNewsCount > 0) {
+      showAlert(
+        `Đã xóa danh mục "${deleteTarget.name}". Lưu ý: có ${associatedNewsCount} bài báo liên quan cần cập nhật lại danh mục.`,
+        "warning"
+      );
+    } else {
+      showAlert(`Đã xóa danh mục "${deleteTarget.name}" thành công!`);
     }
-    setDeleteConfirm({ show: false, category: null });
+    setDeleteTarget(null);
   };
 
-  // Search filter without mutating source list
-  const normalizedKeyword = searchTerm.trim().toLowerCase();
+  // Tìm kiếm theo tên hoặc mô tả (Derived State - không làm thay đổi mảng categories gốc)
+  const keyword = searchTerm.trim().toLowerCase();
   const displayedCategories = categories.filter((cat) => {
-    if (!normalizedKeyword) return true;
-    const nameMatch = cat.name?.toLowerCase().includes(normalizedKeyword);
-    const descMatch = cat.description?.toLowerCase().includes(normalizedKeyword);
-    return nameMatch || descMatch;
+    if (!keyword) return true;
+    return (
+      cat.name?.toLowerCase().includes(keyword) ||
+      cat.description?.toLowerCase().includes(keyword)
+    );
   });
 
   return (
     <div className="d-flex flex-column gap-3">
-      {/* Toast Feedback Alert */}
       {alertInfo && (
         <Alert variant={alertInfo.variant} dismissible onClose={() => setAlertInfo(null)} className="py-2">
           {alertInfo.message}
         </Alert>
       )}
 
-      {/* Action Header: Search & Create Button */}
+      {/* Thanh công cụ: Tìm kiếm & Nút Thêm mới */}
       <div className="custom-card p-3 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
         <div className="d-flex align-items-center gap-2 flex-grow-1" style={{ maxWidth: "420px" }}>
           <InputGroup>
@@ -108,7 +110,7 @@ export default function CategoryManagement({ categories, onAddCategory, onUpdate
         </div>
       </div>
 
-      {/* Categories Table View */}
+      {/* Bảng danh sách Danh mục */}
       <div className="custom-card overflow-hidden">
         {displayedCategories.length === 0 ? (
           <div className="empty-state">
@@ -140,13 +142,15 @@ export default function CategoryManagement({ categories, onAddCategory, onUpdate
               </thead>
               <tbody>
                 {displayedCategories.map((cat) => {
-                  const articleCount = news.filter((n) => Number(n.categoryId) === Number(cat.id)).length;
+                  const articleCount = news.filter(
+                    (n) => Number(n.categoryId) === Number(cat.id)
+                  ).length;
+                  const isActive = Number(cat.status) === 1;
+
                   return (
                     <tr key={cat.id}>
                       <td className="fw-bold text-muted">#{cat.id}</td>
-                      <td>
-                        <div className="fw-bold text-dark">{cat.name}</div>
-                      </td>
+                      <td className="fw-bold text-dark">{cat.name}</td>
                       <td className="text-muted small">
                         {cat.description || <span className="fst-italic">Không có mô tả</span>}
                       </td>
@@ -156,17 +160,17 @@ export default function CategoryManagement({ categories, onAddCategory, onUpdate
                         </span>
                       </td>
                       <td>
-                        {cat.status === 1 ? (
-                          <span className="badge-active">
-                            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#16a34a" }} />
-                            Active (1)
-                          </span>
-                        ) : (
-                          <span className="badge-inactive">
-                            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#94a3b8" }} />
-                            Inactive (0)
-                          </span>
-                        )}
+                        <span className={isActive ? "badge-active" : "badge-inactive"}>
+                          <span
+                            style={{
+                              width: 6,
+                              height: 6,
+                              borderRadius: "50%",
+                              background: isActive ? "#16a34a" : "#94a3b8"
+                            }}
+                          />
+                          {isActive ? "Active (1)" : "Inactive (0)"}
+                        </span>
                       </td>
                       <td className="text-end">
                         <div className="d-flex justify-content-end gap-2">
@@ -181,7 +185,7 @@ export default function CategoryManagement({ categories, onAddCategory, onUpdate
                           <Button
                             variant="outline-danger"
                             size="sm"
-                            onClick={() => handleOpenDelete(cat)}
+                            onClick={() => setDeleteTarget(cat)}
                             title="Xóa danh mục"
                           >
                             🗑️ Xóa
@@ -197,22 +201,22 @@ export default function CategoryManagement({ categories, onAddCategory, onUpdate
         )}
       </div>
 
-      {/* Popup Dialog for Create/Update */}
+      {/* Hộp thoại Thêm / Cập nhật Danh mục */}
       <CategoryModal
         show={modalState.show}
         mode={modalState.mode}
         category={modalState.category}
         onSave={handleSaveModal}
-        onClose={() => setModalState({ show: false, mode: "create", category: null })}
+        onClose={handleCloseModal}
       />
 
-      {/* Confirmation Dialog for Delete */}
+      {/* Hộp thoại Xác nhận Xóa */}
       <DeleteConfirmModal
-        show={deleteConfirm.show}
+        show={Boolean(deleteTarget)}
         title="Danh Mục"
-        itemName={deleteConfirm.category?.name}
+        itemName={deleteTarget?.name}
         onConfirm={handleConfirmDelete}
-        onCancel={() => setDeleteConfirm({ show: false, category: null })}
+        onCancel={() => setDeleteTarget(null)}
       />
     </div>
   );

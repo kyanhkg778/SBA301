@@ -1,48 +1,47 @@
 import { useState, useEffect } from "react";
 import { Modal, Button, Form, Alert, Row, Col } from "react-bootstrap";
 
-export default function UserModal({ show, mode, user, onSave, onClose }) {
-  const [formData, setFormData] = useState({
-    username: "",
-    fullName: "",
-    email: "",
-    role: 2, // Default: Staff
-    status: 1
-  });
-  const [error, setError] = useState("");
+const DEFAULT_FORM = {
+  username: "",
+  fullName: "",
+  email: "",
+  role: 2, // Mặc định: Staff (2)
+  status: 1
+};
 
+export default function UserModal({ show, mode, user, onSave, onClose }) {
+  const [formData, setFormData] = useState(DEFAULT_FORM);
+  const [error, setError] = useState("");
+  const isUpdate = mode === "update";
+
+  // Đồng bộ dữ liệu vào Form khi mở Modal
   useEffect(() => {
-    if (show) {
-      if (mode === "update" && user) {
-        setFormData({
-          username: user.username || "",
-          fullName: user.fullName || "",
-          email: user.email || "",
-          role: user.role !== undefined ? Number(user.role) : 2,
-          status: user.status !== undefined ? Number(user.status) : 1
-        });
-      } else {
-        setFormData({
-          username: "",
-          fullName: "",
-          email: "",
-          role: 2,
-          status: 1
-        });
-      }
-      setError("");
+    if (!show) return;
+
+    if (isUpdate && user) {
+      setFormData({
+        username: user.username || "",
+        fullName: user.fullName || "",
+        email: user.email || "",
+        role: user.role !== undefined ? Number(user.role) : 2,
+        status: user.status !== undefined ? Number(user.status) : 1
+      });
+    } else {
+      setFormData(DEFAULT_FORM);
     }
-  }, [show, mode, user]);
+    setError("");
+  }, [show, isUpdate, user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: (name === "role" || name === "status") ? Number(value) : value
+      [name]: name === "role" || name === "status" ? Number(value) : value
     }));
     if (error) setError("");
   };
 
+  // Kiểm tra dữ liệu hợp lệ (Validation) trước khi lưu
   const handleSubmit = (e) => {
     e.preventDefault();
     const trimmedUsername = formData.username.trim();
@@ -53,12 +52,10 @@ export default function UserModal({ show, mode, user, onSave, onClose }) {
       setError("Tên đăng nhập không được để trống (Username is required).");
       return;
     }
-
     if (!trimmedFullName) {
       setError("Họ và tên không được để trống (Full Name is required).");
       return;
     }
-
     if (!trimmedEmail || !trimmedEmail.includes("@")) {
       setError("Vui lòng nhập định dạng email hợp lệ (Valid email is required).");
       return;
@@ -73,8 +70,6 @@ export default function UserModal({ show, mode, user, onSave, onClose }) {
     });
   };
 
-  const isUpdate = mode === "update";
-
   return (
     <Modal show={show} onHide={onClose} centered backdrop="static">
       <Modal.Header closeButton>
@@ -82,6 +77,7 @@ export default function UserModal({ show, mode, user, onSave, onClose }) {
           {isUpdate ? "✏️ Cập Nhật Người Dùng (Update User)" : "➕ Thêm Tài Khoản Mới (Create User)"}
         </Modal.Title>
       </Modal.Header>
+
       <Form onSubmit={handleSubmit}>
         <Modal.Body className="d-flex flex-column gap-3">
           {error && <Alert variant="danger" className="py-2 small">{error}</Alert>}
@@ -98,7 +94,7 @@ export default function UserModal({ show, mode, user, onSave, onClose }) {
               onChange={handleChange}
               disabled={isUpdate && user?.username === "Admin"}
               autoFocus
-              isInvalid={!!error && !formData.username.trim()}
+              isInvalid={Boolean(error) && !formData.username.trim()}
             />
           </Form.Group>
 
@@ -112,7 +108,7 @@ export default function UserModal({ show, mode, user, onSave, onClose }) {
               placeholder="VD: Nguyễn Văn A..."
               value={formData.fullName}
               onChange={handleChange}
-              isInvalid={!!error && !formData.fullName.trim()}
+              isInvalid={Boolean(error) && !formData.fullName.trim()}
             />
           </Form.Group>
 
@@ -126,7 +122,7 @@ export default function UserModal({ show, mode, user, onSave, onClose }) {
               placeholder="user@funews.edu.vn"
               value={formData.email}
               onChange={handleChange}
-              isInvalid={!!error && (!formData.email.trim() || !formData.email.includes("@"))}
+              isInvalid={Boolean(error) && (!formData.email.trim() || !formData.email.includes("@"))}
             />
           </Form.Group>
 
@@ -134,11 +130,7 @@ export default function UserModal({ show, mode, user, onSave, onClose }) {
             <Col md={6}>
               <Form.Group controlId="userRole">
                 <Form.Label className="small fw-semibold">Vai Trò (Role)</Form.Label>
-                <Form.Select
-                  name="role"
-                  value={formData.role}
-                  onChange={handleChange}
-                >
+                <Form.Select name="role" value={formData.role} onChange={handleChange}>
                   <option value={1}>🛡️ Quản trị viên (Admin - 1)</option>
                   <option value={2}>✍️ Biên tập viên (Staff - 2)</option>
                 </Form.Select>
@@ -148,11 +140,7 @@ export default function UserModal({ show, mode, user, onSave, onClose }) {
             <Col md={6}>
               <Form.Group controlId="userStatus">
                 <Form.Label className="small fw-semibold">Trạng Thái (Status)</Form.Label>
-                <Form.Select
-                  name="status"
-                  value={formData.status}
-                  onChange={handleChange}
-                >
+                <Form.Select name="status" value={formData.status} onChange={handleChange}>
                   <option value={1}>🟢 Kích hoạt (Active - 1)</option>
                   <option value={0}>⚪ Khóa / Ngưng (Inactive - 0)</option>
                 </Form.Select>
