@@ -1,72 +1,62 @@
 import { useState } from "react";
-import { Form, Button, Alert } from "react-bootstrap";
-
-// Danh sách tài khoản mẫu phục vụ kiểm thử đăng nhập (Mock Authentication)
-const DEMO_ACCOUNTS = [
-  {
-    username: "Admin",
-    password: "Admin",
-    profile: {
-      id: 1,
-      username: "Admin",
-      fullName: "System Administrator",
-      email: "admin@funews.edu.vn",
-      role: 1
-    }
-  },
-  {
-    username: "Staff",
-    password: "Staff",
-    profile: {
-      id: 2,
-      username: "Staff",
-      fullName: "Editorial Staff Member",
-      email: "staff@funews.edu.vn",
-      role: 2
-    }
-  }
-];
+import { Form, Button, Alert, Card, Badge } from "react-bootstrap";
 
 export default function LoginPage({ onLoginSuccess }) {
+  // Quản lý state cho form đăng nhập: tài khoản, mật khẩu và thông báo lỗi
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  // =========================================================================
+  // XỬ LÝ SUBMIT ĐĂNG NHẬP (AUTHENTICATION & VALIDATION)
+  // =========================================================================
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Ngăn chặn reload trang mặc định của HTML Form
     const trimmedUser = username.trim();
     const trimmedPass = password.trim();
 
+    // 1. Kiểm tra validation: Bắt buộc không được để trống tài khoản hoặc mật khẩu
     if (!trimmedUser || !trimmedPass) {
       setError("Vui lòng nhập đầy đủ Tên đăng nhập và Mật khẩu.");
       return;
     }
 
-    // Kiểm tra thông tin đăng nhập (không phân biệt hoa/thường cho username)
-    const matchedAccount = DEMO_ACCOUNTS.find(
-      (acc) =>
-        acc.username.toLowerCase() === trimmedUser.toLowerCase() &&
-        acc.password === trimmedPass
-    );
-
-    if (matchedAccount) {
-      onLoginSuccess(matchedAccount.profile);
+    // 2. Xác thực tài khoản (Mock Authentication Logic theo yêu cầu đồ án):
+    // - Tài khoản Admin (Admin / Admin): Cấp quyền Quản trị viên cao nhất (Role 1)
+    // - Tài khoản Staff (Staff / Staff): Cấp quyền Nhân viên biên tập (Role 2)
+    if (trimmedUser.toLowerCase() === "admin" && trimmedPass === "Admin") {
+      onLoginSuccess({
+        id: 1,
+        username: "Admin",
+        fullName: "System Administrator",
+        email: "admin@funews.edu.vn",
+        role: 1 // Role 1: Toàn quyền quản trị hệ thống
+      });
+    } else if (trimmedUser.toLowerCase() === "staff" && trimmedPass === "Staff") {
+      onLoginSuccess({
+        id: 2,
+        username: "Staff",
+        fullName: "Editorial Staff Member",
+        email: "staff@funews.edu.vn",
+        role: 2 // Role 2: Quyền nhân viên (giới hạn quyền theo nghiệp vụ)
+      });
     } else {
+      // Báo lỗi nếu thông tin đăng nhập không khớp
       setError("Tên đăng nhập hoặc mật khẩu không chính xác! (Gợi ý test: Admin / Admin)");
     }
   };
 
-  // Điền nhanh tài khoản mẫu khi bấm nút Demo
+  // Hàm hỗ trợ điền nhanh tài khoản demo để chấm bài hoặc kiểm thử
   const handleFillDemo = (user, pass) => {
     setUsername(user);
     setPassword(pass);
-    setError("");
+    setError(""); // Xóa thông báo lỗi cũ nếu có
   };
 
   return (
     <div className="login-bg">
       <div className="login-card">
-        {/* Logo thương hiệu */}
+        {/* Brand Logo */}
         <div className="login-logo">
           <img src="/logo.svg" alt="FUNews Logo" />
           <div className="text-muted small mt-2">Cổng Quản Trị Hệ Thống Tin Tức</div>
@@ -80,9 +70,7 @@ export default function LoginPage({ onLoginSuccess }) {
 
         <Form onSubmit={handleSubmit} className="d-flex flex-column gap-3">
           <Form.Group controlId="loginUsername">
-            <Form.Label className="small fw-semibold text-secondary">
-              Tên đăng nhập (Username)
-            </Form.Label>
+            <Form.Label className="small fw-semibold text-secondary">Tên đăng nhập (Username)</Form.Label>
             <Form.Control
               type="text"
               placeholder="Nhập tên đăng nhập (VD: Admin)"
@@ -97,9 +85,7 @@ export default function LoginPage({ onLoginSuccess }) {
           </Form.Group>
 
           <Form.Group controlId="loginPassword">
-            <Form.Label className="small fw-semibold text-secondary">
-              Mật khẩu (Password)
-            </Form.Label>
+            <Form.Label className="small fw-semibold text-secondary">Mật khẩu (Password)</Form.Label>
             <Form.Control
               type="password"
               placeholder="Nhập mật khẩu (VD: Admin)"
@@ -116,10 +102,10 @@ export default function LoginPage({ onLoginSuccess }) {
             Đăng Nhập (Login to Admin)
           </Button>
 
-          {/* Nút điền nhanh tài khoản kiểm thử */}
+          {/* Quick Demo Credentials */}
           <div className="pt-3 border-top mt-2">
-            <div className="small text-muted fw-semibold mb-2">
-              Tài khoản kiểm thử nhanh:
+            <div className="d-flex justify-content-between align-items-center mb-2">
+              <span className="small text-muted fw-semibold">Tài khoản kiểm thử nhanh:</span>
             </div>
             <div className="d-flex gap-2">
               <Button
@@ -144,6 +130,7 @@ export default function LoginPage({ onLoginSuccess }) {
           </div>
         </Form>
 
+        {/* Student Credential Note */}
         <div className="text-center text-muted small mt-4 pt-2 border-top">
           Sinh viên: <strong>Lâm Đăng Kỳ Anh</strong> • CE190574
         </div>

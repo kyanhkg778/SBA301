@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Run Main (Spring Boot with .env)",
+            "request": "launch",
+            "mainClass": "fu.edu.sba301.ch18.app.Main",
+            "projectName": "chapter18-hibernate-crud",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

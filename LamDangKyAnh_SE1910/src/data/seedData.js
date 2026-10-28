@@ -1,11 +1,3 @@
-/**
- * Dữ liệu mẫu khởi tạo (Seed Data) cho hệ thống FUNews Management System.
- * Quy ước chung:
- * - status: 1 = Active / Published (Hoạt động), 0 = Inactive / Draft (Tạm ẩn / Nháp)
- * - role:   1 = Admin (Quản trị viên), 2 = Staff (Biên tập viên)
- */
-
-// 1. Danh sách Danh mục tin tức (Categories)
 export const INITIAL_CATEGORIES = [
   {
     id: 1,
@@ -39,7 +31,6 @@ export const INITIAL_CATEGORIES = [
   }
 ];
 
-// 2. Danh sách Bài báo (News Articles) - Liên kết với Category qua khóa ngoại categoryId
 export const INITIAL_NEWS = [
   {
     id: 1,
@@ -103,14 +94,13 @@ export const INITIAL_NEWS = [
   }
 ];
 
-// 3. Danh sách Người dùng (Users)
 export const INITIAL_USERS = [
   {
     id: 1,
     username: "Admin",
     fullName: "System Administrator",
     email: "admin@funews.edu.vn",
-    role: 1,
+    role: 1, // 1 = Admin
     status: 1
   },
   {
@@ -118,7 +108,7 @@ export const INITIAL_USERS = [
     username: "Staff",
     fullName: "Editorial Staff Member",
     email: "staff@funews.edu.vn",
-    role: 2,
+    role: 2, // 2 = Staff
     status: 1
   },
   {

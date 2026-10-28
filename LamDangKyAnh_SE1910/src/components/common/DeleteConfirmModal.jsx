@@ -1,9 +1,5 @@
 import { Modal, Button } from "react-bootstrap";
 
-/**
- * Hộp thoại xác nhận xóa dùng chung (Reusable Delete Confirmation Modal)
- * Sử dụng cho cả 4 chức năng: Xóa Danh mục, Xóa Bài báo, Xóa Người dùng và Reset Database.
- */
 export default function DeleteConfirmModal({ show, title, itemName, onConfirm, onCancel }) {
   return (
     <Modal show={show} onHide={onCancel} centered backdrop="static">
@@ -12,7 +8,6 @@ export default function DeleteConfirmModal({ show, title, itemName, onConfirm, o
           ⚠️ Xác Nhận Xóa (Delete Confirmation)
         </Modal.Title>
       </Modal.Header>
-
       <Modal.Body className="py-3">
         <p className="mb-2 text-muted">
           Bạn có chắc chắn muốn xóa mục <strong>{title || "bản ghi này"}</strong>?
@@ -26,7 +21,6 @@ export default function DeleteConfirmModal({ show, title, itemName, onConfirm, o
           * Thao tác này sẽ xóa bản ghi khỏi danh sách và cập nhật trực tiếp vào bộ nhớ.
         </p>
       </Modal.Body>
-
       <Modal.Footer className="border-0 pt-0">
         <Button variant="secondary" onClick={onCancel} className="px-3">
           Hủy bỏ (Cancel)
