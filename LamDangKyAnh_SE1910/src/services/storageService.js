@@ -1,6 +1,7 @@
 import { INITIAL_CATEGORIES, INITIAL_NEWS, INITIAL_USERS } from "../data/seedData";
 
-const KEYS = {
+// Các khóa lưu trữ trong LocalStorage của trình duyệt
+const STORAGE_KEYS = {
   CATEGORIES: "funews_categories",
   NEWS: "funews_news",
   USERS: "funews_users",
@@ -8,131 +9,86 @@ const KEYS = {
   THEME: "funews_theme_preference"
 };
 
+/**
+ * Hàm dùng chung để đọc dữ liệu JSON từ LocalStorage.
+ * Nếu chưa có dữ liệu hoặc lỗi parse, tự động khởi tạo bằng dữ liệu mẫu (fallbackData).
+ */
+const readStorage = (key, fallbackData) => {
+  try {
+    const rawData = localStorage.getItem(key);
+    if (!rawData) {
+      if (fallbackData !== null) {
+        localStorage.setItem(key, JSON.stringify(fallbackData));
+      }
+      return fallbackData;
+    }
+    return JSON.parse(rawData);
+  } catch (error) {
+    console.error(`Lỗi đọc dữ liệu từ khóa [${key}]:`, error);
+    return fallbackData;
+  }
+};
+
+/**
+ * Hàm dùng chung để ghi dữ liệu xuống LocalStorage.
+ */
+const writeStorage = (key, data) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(data));
+  } catch (error) {
+    console.error(`Lỗi lưu dữ liệu vào khóa [${key}]:`, error);
+  }
+};
+
 export const storageService = {
-  getCategories: () => {
-    try {
-      const data = localStorage.getItem(KEYS.CATEGORIES);
-      if (!data) {
-        localStorage.setItem(KEYS.CATEGORIES, JSON.stringify(INITIAL_CATEGORIES));
-        return INITIAL_CATEGORIES;
-      }
-      return JSON.parse(data);
-    } catch (e) {
-      console.error("Failed to load categories from localStorage", e);
-      return INITIAL_CATEGORIES;
-    }
-  },
+  // Quản lý Danh mục (Categories)
+  getCategories: () => readStorage(STORAGE_KEYS.CATEGORIES, INITIAL_CATEGORIES),
+  saveCategories: (categories) => writeStorage(STORAGE_KEYS.CATEGORIES, categories),
 
-  saveCategories: (categories) => {
-    try {
-      localStorage.setItem(KEYS.CATEGORIES, JSON.stringify(categories));
-    } catch (e) {
-      console.error("Failed to save categories to localStorage", e);
-    }
-  },
+  // Quản lý Bài báo (News)
+  getNews: () => readStorage(STORAGE_KEYS.NEWS, INITIAL_NEWS),
+  saveNews: (news) => writeStorage(STORAGE_KEYS.NEWS, news),
 
-  getNews: () => {
-    try {
-      const data = localStorage.getItem(KEYS.NEWS);
-      if (!data) {
-        localStorage.setItem(KEYS.NEWS, JSON.stringify(INITIAL_NEWS));
-        return INITIAL_NEWS;
-      }
-      return JSON.parse(data);
-    } catch (e) {
-      console.error("Failed to load news from localStorage", e);
-      return INITIAL_NEWS;
-    }
-  },
+  // Quản lý Người dùng (Users)
+  getUsers: () => readStorage(STORAGE_KEYS.USERS, INITIAL_USERS),
+  saveUsers: (users) => writeStorage(STORAGE_KEYS.USERS, users),
 
-  saveNews: (news) => {
-    try {
-      localStorage.setItem(KEYS.NEWS, JSON.stringify(news));
-    } catch (e) {
-      console.error("Failed to save news to localStorage", e);
-    }
-  },
-
-  getUsers: () => {
-    try {
-      const data = localStorage.getItem(KEYS.USERS);
-      if (!data) {
-        localStorage.setItem(KEYS.USERS, JSON.stringify(INITIAL_USERS));
-        return INITIAL_USERS;
-      }
-      return JSON.parse(data);
-    } catch (e) {
-      console.error("Failed to load users from localStorage", e);
-      return INITIAL_USERS;
-    }
-  },
-
-  saveUsers: (users) => {
-    try {
-      localStorage.setItem(KEYS.USERS, JSON.stringify(users));
-    } catch (e) {
-      console.error("Failed to save users to localStorage", e);
-    }
-  },
-
+  // Khôi phục toàn bộ dữ liệu về mặc định (Seed Data)
   resetAllData: () => {
-    try {
-      localStorage.setItem(KEYS.CATEGORIES, JSON.stringify(INITIAL_CATEGORIES));
-      localStorage.setItem(KEYS.NEWS, JSON.stringify(INITIAL_NEWS));
-      localStorage.setItem(KEYS.USERS, JSON.stringify(INITIAL_USERS));
-      return {
-        categories: INITIAL_CATEGORIES,
-        news: INITIAL_NEWS,
-        users: INITIAL_USERS
-      };
-    } catch (e) {
-      console.error("Failed to reset database", e);
-      return {
-        categories: INITIAL_CATEGORIES,
-        news: INITIAL_NEWS,
-        users: INITIAL_USERS
-      };
-    }
+    writeStorage(STORAGE_KEYS.CATEGORIES, INITIAL_CATEGORIES);
+    writeStorage(STORAGE_KEYS.NEWS, INITIAL_NEWS);
+    writeStorage(STORAGE_KEYS.USERS, INITIAL_USERS);
+    return {
+      categories: INITIAL_CATEGORIES,
+      news: INITIAL_NEWS,
+      users: INITIAL_USERS
+    };
   },
 
-  getAuthSession: () => {
-    try {
-      const data = localStorage.getItem(KEYS.AUTH);
-      return data ? JSON.parse(data) : null;
-    } catch (e) {
-      return null;
-    }
-  },
-
-  saveAuthSession: (user) => {
-    try {
-      localStorage.setItem(KEYS.AUTH, JSON.stringify(user));
-    } catch (e) {
-      console.error("Failed to save auth session", e);
-    }
-  },
-
+  // Quản lý phiên đăng nhập (Auth Session)
+  getAuthSession: () => readStorage(STORAGE_KEYS.AUTH, null),
+  saveAuthSession: (user) => writeStorage(STORAGE_KEYS.AUTH, user),
   clearAuthSession: () => {
     try {
-      localStorage.removeItem(KEYS.AUTH);
-    } catch (e) {
-      console.error("Failed to clear auth session", e);
+      localStorage.removeItem(STORAGE_KEYS.AUTH);
+    } catch (error) {
+      console.error("Lỗi xóa phiên đăng nhập:", error);
     }
   },
 
+  // Quản lý giao diện Sáng / Tối (Theme)
   getTheme: () => {
     try {
-      return localStorage.getItem(KEYS.THEME) || "light";
-    } catch (e) {
+      return localStorage.getItem(STORAGE_KEYS.THEME) || "light";
+    } catch {
       return "light";
     }
   },
-
   saveTheme: (theme) => {
     try {
-      localStorage.setItem(KEYS.THEME, theme);
-    } catch (e) {
-      console.error("Failed to save theme", e);
+      localStorage.setItem(STORAGE_KEYS.THEME, theme);
+    } catch (error) {
+      console.error("Lỗi lưu giao diện:", error);
     }
   }
 };
