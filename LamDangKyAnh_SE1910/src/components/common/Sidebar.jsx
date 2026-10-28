@@ -1,15 +1,16 @@
-export default function Sidebar({ activeTab, onSelectTab }) {
-  const menuItems = [
-    { id: "dashboard", label: "Dashboard", icon: "📊", badge: null },
-    { id: "categories", label: "Categories", icon: "📁", badge: null },
-    { id: "news", label: "News Articles", icon: "📰", badge: null },
-    { id: "users", label: "User Management", icon: "👥", badge: null },
-    { id: "settings", label: "System Settings", icon: "⚙️", badge: null }
-  ];
+// Danh sách các mục điều hướng trên thanh menu bên trái (Sidebar)
+const MENU_ITEMS = [
+  { id: "dashboard", label: "Dashboard", icon: "📊" },
+  { id: "categories", label: "Categories", icon: "📁" },
+  { id: "news", label: "News Articles", icon: "📰" },
+  { id: "users", label: "User Management", icon: "👥" },
+  { id: "settings", label: "System Settings", icon: "⚙️" }
+];
 
+export default function Sidebar({ activeTab, onSelectTab }) {
   return (
     <aside className="sidebar-container">
-      {/* Brand Header with AI Generated Logo */}
+      {/* Logo hệ thống */}
       <div className="sidebar-brand">
         <img
           src="/logo.svg"
@@ -18,9 +19,9 @@ export default function Sidebar({ activeTab, onSelectTab }) {
         />
       </div>
 
-      {/* Navigation Menu */}
+      {/* Menu điều hướng các phân hệ */}
       <nav className="sidebar-nav">
-        {menuItems.map((item) => {
+        {MENU_ITEMS.map((item) => {
           const isActive = activeTab === item.id;
           return (
             <button
@@ -47,7 +48,7 @@ export default function Sidebar({ activeTab, onSelectTab }) {
         })}
       </nav>
 
-      {/* Student & Course Footer Information */}
+      {/* Thông tin sinh viên ở chân Sidebar */}
       <div className="sidebar-footer">
         <div className="fw-bold text-white mb-1">FUNews Management</div>
         <div>SV: Lâm Đăng Kỳ Anh</div>

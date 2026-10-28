@@ -8,33 +8,32 @@ import UserManagement from "./components/users/UserManagement";
 import SettingsPage from "./components/settings/SettingsPage";
 import { storageService } from "./services/storageService";
 
+// Hàm hỗ trợ tự động sinh ID tăng dần (Max ID + 1)
+const getNextId = (list) =>
+  list.length > 0 ? Math.max(...list.map((item) => Number(item.id))) + 1 : 1;
+
 export default function App() {
-  // Authentication State
+  // 1. State Quản lý Phiên đăng nhập, Điều hướng Tab & Giao diện (Theme)
   const [currentUser, setCurrentUser] = useState(() => storageService.getAuthSession());
-
-  // Navigation State
   const [activeTab, setActiveTab] = useState("dashboard");
-
-  // Theme State
   const [theme, setTheme] = useState(() => storageService.getTheme());
 
-  // Entity Data States (Hydrated from localStorage)
+  // 2. State Dữ liệu Thực thể (Khởi tạo Lazy Initialization từ LocalStorage)
   const [categories, setCategories] = useState(() => storageService.getCategories());
   const [news, setNews] = useState(() => storageService.getNews());
   const [users, setUsers] = useState(() => storageService.getUsers());
 
-  // Apply Theme Attribute to Document Root
+  // Đồng bộ giao diện Sáng / Tối lên thẻ gốc <html>
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
     storageService.saveTheme(theme);
   }, [theme]);
 
-  // Toggle Theme Handler
   const handleToggleTheme = () => {
     setTheme((prev) => (prev === "dark" ? "light" : "dark"));
   };
 
-  // Auth Handlers
+  // --- XỬ LÝ ĐĂNG NHẬP / ĐĂNG XUẤT ---
   const handleLoginSuccess = (user) => {
     setCurrentUser(user);
     storageService.saveAuthSession(user);
@@ -46,12 +45,10 @@ export default function App() {
     storageService.clearAuthSession();
   };
 
-  // Category CRUD Handlers (Immutable updates)
+  // --- CRUD DANH MỤC (CATEGORIES) - Cập nhật bất biến (Immutable) ---
   const handleAddCategory = (categoryData) => {
     setCategories((prev) => {
-      const nextId = prev.length > 0 ? Math.max(...prev.map((c) => Number(c.id))) + 1 : 1;
-      const newCategory = { id: nextId, ...categoryData };
-      const updated = [...prev, newCategory];
+      const updated = [...prev, { id: getNextId(prev), ...categoryData }];
       storageService.saveCategories(updated);
       return updated;
     });
@@ -75,12 +72,11 @@ export default function App() {
     });
   };
 
-  // News CRUD Handlers (Immutable updates)
+  // --- CRUD BÀI BÁO (NEWS ARTICLES) - Cập nhật bất biến (Immutable) ---
   const handleAddNews = (newsData) => {
     setNews((prev) => {
-      const nextId = prev.length > 0 ? Math.max(...prev.map((n) => Number(n.id))) + 1 : 1;
       const newArticle = {
-        id: nextId,
+        id: getNextId(prev),
         createdAt: new Date().toISOString().split("T")[0],
         ...newsData
       };
@@ -108,12 +104,10 @@ export default function App() {
     });
   };
 
-  // User CRUD Handlers (Immutable updates)
+  // --- CRUD NGƯỜI DÙNG (USERS) - Cập nhật bất biến (Immutable) ---
   const handleAddUser = (userData) => {
     setUsers((prev) => {
-      const nextId = prev.length > 0 ? Math.max(...prev.map((u) => Number(u.id))) + 1 : 1;
-      const newUser = { id: nextId, ...userData };
-      const updated = [...prev, newUser];
+      const updated = [...prev, { id: getNextId(prev), ...userData }];
       storageService.saveUsers(updated);
       return updated;
     });
@@ -137,7 +131,7 @@ export default function App() {
     });
   };
 
-  // Reset to Default Seed Data
+  // --- KHÔI PHỤC DỮ LIỆU GỐC (SEED DATA) ---
   const handleResetAllData = () => {
     const fresh = storageService.resetAllData();
     setCategories(fresh.categories);
@@ -145,12 +139,12 @@ export default function App() {
     setUsers(fresh.users);
   };
 
-  // Render Login Page if not authenticated
+  // Bảo vệ Route: Nếu chưa đăng nhập thì hiển thị màn hình Login
   if (!currentUser) {
     return <LoginPage onLoginSuccess={handleLoginSuccess} />;
   }
 
-  // Render Admin Master Layout with active view
+  // Đã đăng nhập: Hiển thị bố cục quản trị AdminLayout và trang tương ứng theo activeTab
   return (
     <AdminLayout
       currentUser={currentUser}

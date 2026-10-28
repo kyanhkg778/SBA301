@@ -1,5 +1,31 @@
 import { useState } from "react";
-import { Form, Button, Alert, Card, Badge } from "react-bootstrap";
+import { Form, Button, Alert } from "react-bootstrap";
+
+// Danh sách tài khoản mẫu phục vụ kiểm thử đăng nhập (Mock Authentication)
+const DEMO_ACCOUNTS = [
+  {
+    username: "Admin",
+    password: "Admin",
+    profile: {
+      id: 1,
+      username: "Admin",
+      fullName: "System Administrator",
+      email: "admin@funews.edu.vn",
+      role: 1
+    }
+  },
+  {
+    username: "Staff",
+    password: "Staff",
+    profile: {
+      id: 2,
+      username: "Staff",
+      fullName: "Editorial Staff Member",
+      email: "staff@funews.edu.vn",
+      role: 2
+    }
+  }
+];
 
 export default function LoginPage({ onLoginSuccess }) {
   const [username, setUsername] = useState("");
@@ -16,30 +42,21 @@ export default function LoginPage({ onLoginSuccess }) {
       return;
     }
 
-    // Mock Authentication Logic
-    // Admin / Admin -> Role 1
-    // Staff / Staff -> Role 2
-    if (trimmedUser.toLowerCase() === "admin" && trimmedPass === "Admin") {
-      onLoginSuccess({
-        id: 1,
-        username: "Admin",
-        fullName: "System Administrator",
-        email: "admin@funews.edu.vn",
-        role: 1
-      });
-    } else if (trimmedUser.toLowerCase() === "staff" && trimmedPass === "Staff") {
-      onLoginSuccess({
-        id: 2,
-        username: "Staff",
-        fullName: "Editorial Staff Member",
-        email: "staff@funews.edu.vn",
-        role: 2
-      });
+    // Kiểm tra thông tin đăng nhập (không phân biệt hoa/thường cho username)
+    const matchedAccount = DEMO_ACCOUNTS.find(
+      (acc) =>
+        acc.username.toLowerCase() === trimmedUser.toLowerCase() &&
+        acc.password === trimmedPass
+    );
+
+    if (matchedAccount) {
+      onLoginSuccess(matchedAccount.profile);
     } else {
       setError("Tên đăng nhập hoặc mật khẩu không chính xác! (Gợi ý test: Admin / Admin)");
     }
   };
 
+  // Điền nhanh tài khoản mẫu khi bấm nút Demo
   const handleFillDemo = (user, pass) => {
     setUsername(user);
     setPassword(pass);
@@ -49,7 +66,7 @@ export default function LoginPage({ onLoginSuccess }) {
   return (
     <div className="login-bg">
       <div className="login-card">
-        {/* Brand Logo */}
+        {/* Logo thương hiệu */}
         <div className="login-logo">
           <img src="/logo.svg" alt="FUNews Logo" />
           <div className="text-muted small mt-2">Cổng Quản Trị Hệ Thống Tin Tức</div>
@@ -63,7 +80,9 @@ export default function LoginPage({ onLoginSuccess }) {
 
         <Form onSubmit={handleSubmit} className="d-flex flex-column gap-3">
           <Form.Group controlId="loginUsername">
-            <Form.Label className="small fw-semibold text-secondary">Tên đăng nhập (Username)</Form.Label>
+            <Form.Label className="small fw-semibold text-secondary">
+              Tên đăng nhập (Username)
+            </Form.Label>
             <Form.Control
               type="text"
               placeholder="Nhập tên đăng nhập (VD: Admin)"
@@ -78,7 +97,9 @@ export default function LoginPage({ onLoginSuccess }) {
           </Form.Group>
 
           <Form.Group controlId="loginPassword">
-            <Form.Label className="small fw-semibold text-secondary">Mật khẩu (Password)</Form.Label>
+            <Form.Label className="small fw-semibold text-secondary">
+              Mật khẩu (Password)
+            </Form.Label>
             <Form.Control
               type="password"
               placeholder="Nhập mật khẩu (VD: Admin)"
@@ -95,10 +116,10 @@ export default function LoginPage({ onLoginSuccess }) {
             Đăng Nhập (Login to Admin)
           </Button>
 
-          {/* Quick Demo Credentials */}
+          {/* Nút điền nhanh tài khoản kiểm thử */}
           <div className="pt-3 border-top mt-2">
-            <div className="d-flex justify-content-between align-items-center mb-2">
-              <span className="small text-muted fw-semibold">Tài khoản kiểm thử nhanh:</span>
+            <div className="small text-muted fw-semibold mb-2">
+              Tài khoản kiểm thử nhanh:
             </div>
             <div className="d-flex gap-2">
               <Button
@@ -123,7 +144,6 @@ export default function LoginPage({ onLoginSuccess }) {
           </div>
         </Form>
 
-        {/* Student Credential Note */}
         <div className="text-center text-muted small mt-4 pt-2 border-top">
           Sinh viên: <strong>Lâm Đăng Kỳ Anh</strong> • CE190574
         </div>
