@@ -201,3 +201,21 @@ Khi được giảng viên yêu cầu mở file và giải thích luồng thực
    - *Delete:* Bấm Delete -> Lưu `categoryToDelete` -> Mở `DeleteConfirmModal` -> Bấm Confirm -> Lọc bỏ `prev.filter(c => c.id !== id)` -> Lưu `localStorage`.
 3. **Search Flow:**
    - Sử dụng biến `displayedItems = items.filter(...)`. Mảng gốc `items` không bị biến đổi, cho phép tìm kiếm và xóa bộ lọc tức thời.
+
+
+---
+
+## 🎓 9. Phụ Lục 12 – Bộ Câu Hỏi Phỏng Vấn, Lệnh & Quy Luật Thực Thi (Interview Q&A)
+
+Toàn bộ câu trả lời chi tiết, chuẩn xác và bám sát mã nguồn dự án cho **Phụ Lục 12 (Mục 12.1 đến 12.6)** của đề bài SBA301 đã được biên soạn đầy đủ tại tệp:
+👉 **[Xem Cẩm Nang Phỏng Vấn Chi Tiết: INTERVIEW_GUIDE.md](file:///d:/Ky7_FA2026/SBA301/LamDangKyAnh_SE1910/INTERVIEW_GUIDE.md)**
+
+### Tóm tắt 6 nhóm chuyên đề phỏng vấn:
+- **12.1 Lệnh và môi trường:** Giải thích cặn kẽ lệnh tạo Vite React, vai trò của `npm install`, `npm run dev`, cấu trúc `package.json`, bản chất `node_modules`, cách dừng dev server (`Ctrl+C`) và xử lý xung đột port.
+- **12.2 React fundamentals:** Định nghĩa chuyên sâu về Component, JSX, phân biệt Props vs State, 4 điều kiện khiến component re-render, lý do kỹ thuật không được mutate trực tiếp state, controlled input, ý nghĩa của `key` trong Reconciliation, conditional rendering và tác dụng của `e.preventDefault()`.
+- **12.3 Luồng thực thi:** Truy vết chi tiết từng bước: `App.jsx` quyết định Login/Admin qua lazy initializer, 6 bước event/state/render khi submit `Admin`/`Admin`, luồng chuyển menu qua `activeTab`, luồng mở modal khi bấm Add, hành trình dữ liệu form từ input đến danh sách qua Spread Operator, cơ chế prefill khi Update qua `useEffect` và thay thế bằng `.map()`, cơ chế bảo vệ của Delete Confirmation và chặn tự xóa tài khoản, phân biệt Source List vs Displayed List (Derived State), và dữ liệu bảo toàn qua F5 nhờ `localStorage`.
+- **12.4 Design & architecture:** Lý do tách Header/Sidebar/Content theo nguyên lý SoC, lý do nâng State lên `App.jsx` (Lifting State Up - Single Source of Truth), ưu điểm của Popup Dialog so với chuyển trang, mục đích và giới hạn của Mock Data, các tầng cần đổi khi kết nối Spring Boot API (`storageService` -> `apiService`), phân quyền Staff role, và thay đổi kiến trúc khi áp dụng Server-side Pagination & Debounced Search.
+- **12.5 Debugging interview:** Quy trình 4 bước kiểm tra khi List không hiển thị, cách kiểm tra state/event/props khi Modal không mở, dấu hiệu nhận biết mutate state khi Delete không re-render (`splice` vs `filter`), sơ đồ 4 điểm khoanh vùng khi Login đúng nhưng không vào Admin, các điểm kiểm tra khi Search sai kết quả (`trim`, `toLowerCase`, optional chaining `?.`), và phân tích reload mất dữ liệu là bug hay đúng design.
+- **12.6 AI usage interview:** Minh bạch các phần ứng dụng AI (Thiết kế logo SVG, gợi ý khung Test Matrix, tham khảo bảng màu HSL), prompt cụ thể hiệu quả nhất, 4 cấp độ kiểm chứng output độc lập (35 test cases, `npm run build`, React DevTools, kiểm tra an toàn dữ liệu), các can thiệp tái cấu trúc so với gợi ý AI (Lifting State Up, Derived State, chặn tự xóa tài khoản), cách phát hiện code sai/API ảo của AI, và khẳng định 100% phần kiến trúc, luồng dữ liệu, dịch vụ lưu trữ và kiểm thử do sinh viên tự tay thiết kế và làm chủ.
+
+
