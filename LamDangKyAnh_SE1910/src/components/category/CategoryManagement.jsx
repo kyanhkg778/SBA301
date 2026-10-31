@@ -95,11 +95,11 @@ export default function CategoryManagement({ categories, onAddCategory, onUpdate
       {/* Action Header: Search & Create Button */}
       <div className="custom-card p-3 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
         <div className="d-flex align-items-center gap-2 flex-grow-1" style={{ maxWidth: "420px" }}>
-          <InputGroup>
+          <InputGroup size="sm">
             <InputGroup.Text className="bg-light border-end-0">🔍</InputGroup.Text>
             <Form.Control
               type="text"
-              placeholder="Tìm kiếm danh mục theo tên hoặc mô tả..."
+              placeholder="Tìm kiếm danh mục..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="border-start-0"
@@ -113,11 +113,11 @@ export default function CategoryManagement({ categories, onAddCategory, onUpdate
         </div>
 
         <div className="d-flex align-items-center gap-2">
-          <Badge bg="secondary" className="px-3 py-2 fs-6">
-            Tổng cộng: {displayedCategories.length} / {categories.length}
-          </Badge>
-          <Button variant="primary" onClick={handleOpenCreate} className="d-flex align-items-center gap-2">
-            <span>➕</span> Thêm Danh Mục (Add Category)
+          <span className="text-muted small">
+            Tổng: <strong>{displayedCategories.length}</strong> danh mục
+          </span>
+          <Button variant="primary" size="sm" onClick={handleOpenCreate} className="d-flex align-items-center gap-1 px-3">
+            <span>+</span> Thêm danh mục
           </Button>
         </div>
       </div>
@@ -127,15 +127,15 @@ export default function CategoryManagement({ categories, onAddCategory, onUpdate
         {displayedCategories.length === 0 ? (
           <div className="empty-state">
             <div className="empty-state-icon">📁</div>
-            <h5 className="fw-semibold">Không tìm thấy danh mục nào</h5>
+            <h6 className="fw-semibold">Không tìm thấy danh mục</h6>
             <p className="text-muted small">
               {searchTerm
-                ? `Không có kết quả nào khớp với từ khóa "${searchTerm}".`
-                : "Chưa có danh mục nào trong hệ thống. Hãy bấm nút 'Thêm Danh Mục' để bắt đầu."}
+                ? `Không có kết quả nào khớp với "${searchTerm}".`
+                : "Chưa có danh mục nào. Hãy bấm 'Thêm danh mục' để bắt đầu."}
             </p>
             {searchTerm && (
               <Button variant="outline-primary" size="sm" onClick={() => setSearchTerm("")}>
-                Xóa bộ lọc tìm kiếm
+                Xóa tìm kiếm
               </Button>
             )}
           </div>
@@ -144,12 +144,12 @@ export default function CategoryManagement({ categories, onAddCategory, onUpdate
             <table className="custom-table">
               <thead>
                 <tr>
-                  <th style={{ width: "80px" }}>ID</th>
-                  <th style={{ width: "240px" }}>Tên Danh Mục (Name)</th>
-                  <th>Mô Tả (Description)</th>
-                  <th style={{ width: "160px" }}>Số Bài Báo</th>
-                  <th style={{ width: "150px" }}>Trạng Thái</th>
-                  <th style={{ width: "160px" }} className="text-end">Thao Tác</th>
+                  <th style={{ width: "70px" }}>ID</th>
+                  <th style={{ width: "220px" }}>Tên danh mục</th>
+                  <th>Mô tả</th>
+                  <th style={{ width: "120px" }}>Bài viết</th>
+                  <th style={{ width: "130px" }}>Trạng thái</th>
+                  <th style={{ width: "140px" }} className="text-end">Thao tác</th>
                 </tr>
               </thead>
               <tbody>
@@ -157,44 +157,46 @@ export default function CategoryManagement({ categories, onAddCategory, onUpdate
                   const articleCount = news.filter((n) => Number(n.categoryId) === Number(cat.id)).length;
                   return (
                     <tr key={cat.id}>
-                      <td className="fw-bold text-muted">#{cat.id}</td>
+                      <td className="fw-semibold text-muted">#{cat.id}</td>
                       <td>
-                        <div className="fw-bold text-dark">{cat.name}</div>
+                        <div className="fw-semibold text-dark">{cat.name}</div>
                       </td>
                       <td className="text-muted small">
-                        {cat.description || <span className="fst-italic">Không có mô tả</span>}
+                        {cat.description || <span className="fst-italic text-secondary">Không có mô tả</span>}
                       </td>
                       <td>
                         <span className="badge bg-light text-dark border">
-                          📄 {articleCount} bài báo
+                          {articleCount} bài
                         </span>
                       </td>
                       <td>
                         {cat.status === 1 ? (
                           <span className="badge-active">
                             <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#16a34a" }} />
-                            Active (1)
+                            Hoạt động
                           </span>
                         ) : (
                           <span className="badge-inactive">
                             <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#94a3b8" }} />
-                            Inactive (0)
+                            Tạm ẩn
                           </span>
                         )}
                       </td>
                       <td className="text-end">
-                        <div className="d-flex justify-content-end gap-2">
+                        <div className="d-flex justify-content-end gap-1">
                           <Button
-                            variant="outline-primary"
+                            variant="light"
                             size="sm"
+                            className="border text-primary py-1 px-2"
                             onClick={() => handleOpenEdit(cat)}
                             title="Sửa danh mục"
                           >
                             ✏️ Sửa
                           </Button>
                           <Button
-                            variant="outline-danger"
+                            variant="light"
                             size="sm"
+                            className="border text-danger py-1 px-2"
                             onClick={() => handleOpenDelete(cat)}
                             title="Xóa danh mục"
                           >

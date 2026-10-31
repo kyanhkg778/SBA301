@@ -17,33 +17,22 @@ export default function DashboardPage({ categories, news, users, onSelectTab }) 
   const recentNews = [...news].reverse().slice(0, 4);
 
   return (
-    <div className="d-flex flex-column gap-4">
-      {/* Welcome Banner */}
-      <div
-        className="p-4 rounded-4 text-white shadow-sm"
-        style={{
-          background: "linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #0369a1 100%)",
-          border: "1px solid rgba(255, 255, 255, 0.15)"
-        }}
-      >
-        <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
-          <div>
-            <div className="badge bg-white text-primary px-3 py-1 mb-2 fw-semibold rounded-pill">
-              ⭐ SBA301 Assignment 01 • ReactJS SPA
-            </div>
-            <h3 className="fw-bold mb-1">FUNews Management System</h3>
-            <p className="mb-0 text-white-50" style={{ maxWidth: "600px" }}>
-              Hệ thống quản trị tin tức toàn diện cho FPT University. Quản lý danh mục, bài viết xuất bản, tài khoản người dùng và sẵn sàng kết nối Spring Boot REST API.
-            </p>
-          </div>
-          <div className="d-flex gap-2">
-            <Button variant="light" className="fw-semibold px-3 text-primary" onClick={() => onSelectTab("news")}>
-              📰 Quản lý bài báo
-            </Button>
-            <Button variant="outline-light" className="px-3" onClick={() => onSelectTab("categories")}>
-              📁 Danh mục
-            </Button>
-          </div>
+    <div className="d-flex flex-column gap-3">
+      {/* Sleek Greeting Header */}
+      <div className="custom-card p-3 p-md-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+        <div>
+          <h4 className="fw-bold mb-1 text-dark">Tổng quan hệ thống</h4>
+          <p className="text-muted small mb-0">
+            Theo dõi dữ liệu tin tức, danh mục và người dùng theo thời gian thực.
+          </p>
+        </div>
+        <div className="d-flex gap-2">
+          <Button variant="primary" size="sm" className="px-3" onClick={() => onSelectTab("news")}>
+            + Soạn bài viết
+          </Button>
+          <Button variant="outline-secondary" size="sm" className="px-3" onClick={() => onSelectTab("categories")}>
+            + Thêm danh mục
+          </Button>
         </div>
       </div>
 
@@ -51,13 +40,13 @@ export default function DashboardPage({ categories, news, users, onSelectTab }) 
       <Row className="g-3">
         <Col lg={3} sm={6}>
           <div className="stat-card">
-            <div className="stat-icon-wrapper" style={{ background: "#e0e7ff", color: "#4f46e5" }}>
+            <div className="stat-icon-wrapper" style={{ background: "#eef2ff", color: "#4f46e5" }}>
               📰
             </div>
             <div>
-              <div className="text-muted small fw-medium">Tổng số bài báo</div>
-              <div className="fs-3 fw-bold text-dark">{totalNews}</div>
-              <div className="small text-success fw-medium">
+              <div className="text-muted small fw-medium">Tổng bài viết</div>
+              <div className="fs-4 fw-bold text-dark">{totalNews}</div>
+              <div className="small text-success">
                 {publishedNews} xuất bản • {draftNews} nháp
               </div>
             </div>
@@ -70,9 +59,9 @@ export default function DashboardPage({ categories, news, users, onSelectTab }) 
               📁
             </div>
             <div>
-              <div className="text-muted small fw-medium">Tổng số danh mục</div>
-              <div className="fs-3 fw-bold text-dark">{totalCategories}</div>
-              <div className="small text-primary fw-medium">
+              <div className="text-muted small fw-medium">Danh mục</div>
+              <div className="fs-4 fw-bold text-dark">{totalCategories}</div>
+              <div className="small text-primary">
                 {activeCategories} kích hoạt • {totalCategories - activeCategories} ẩn
               </div>
             </div>
@@ -85,9 +74,9 @@ export default function DashboardPage({ categories, news, users, onSelectTab }) 
               👥
             </div>
             <div>
-              <div className="text-muted small fw-medium">Tài khoản quản trị</div>
-              <div className="fs-3 fw-bold text-dark">{totalUsers}</div>
-              <div className="small text-secondary fw-medium">
+              <div className="text-muted small fw-medium">Người dùng</div>
+              <div className="fs-4 fw-bold text-dark">{totalUsers}</div>
+              <div className="small text-secondary">
                 {adminUsers} Admin • {staffUsers} Staff
               </div>
             </div>
@@ -100,10 +89,10 @@ export default function DashboardPage({ categories, news, users, onSelectTab }) 
               ⚡
             </div>
             <div>
-              <div className="text-muted small fw-medium">Trạng thái hệ thống</div>
-              <div className="fs-4 fw-bold text-success">Sẵn sàng (100%)</div>
+              <div className="text-muted small fw-medium">Hệ thống</div>
+              <div className="fs-4 fw-bold text-success">Hoạt động tốt</div>
               <div className="small text-muted">
-                LocalStorage Hydrated
+                Bộ nhớ: Đã đồng bộ
               </div>
             </div>
           </div>
@@ -111,14 +100,14 @@ export default function DashboardPage({ categories, news, users, onSelectTab }) 
       </Row>
 
       {/* Main Content Grid: Recent News + Categories preview */}
-      <Row className="g-4">
+      <Row className="g-3">
         {/* Recent Articles */}
         <Col lg={8}>
-          <div className="custom-card p-3">
+          <div className="custom-card p-3 h-100">
             <div className="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
               <div>
-                <h6 className="fw-bold mb-0">Bài Báo Mới Cập Nhật (Recent Articles)</h6>
-                <small className="text-muted">Các tin tức được tạo gần đây nhất trong cơ sở dữ liệu</small>
+                <h6 className="fw-bold mb-0 text-dark">Bài viết mới nhất</h6>
+                <small className="text-muted">Danh sách bài viết được cập nhật gần đây</small>
               </div>
               <Button variant="link" size="sm" className="text-decoration-none p-0" onClick={() => onSelectTab("news")}>
                 Xem tất cả ({totalNews}) →
@@ -126,32 +115,32 @@ export default function DashboardPage({ categories, news, users, onSelectTab }) 
             </div>
 
             {recentNews.length === 0 ? (
-              <div className="text-center py-4 text-muted small">Chưa có bài báo nào.</div>
+              <div className="text-center py-4 text-muted small">Chưa có bài viết nào.</div>
             ) : (
-              <div className="d-flex flex-column gap-3">
+              <div className="d-flex flex-column gap-2">
                 {recentNews.map((item) => {
                   const cat = categories.find((c) => Number(c.id) === Number(item.categoryId));
                   return (
                     <div
                       key={item.id}
-                      className="p-3 rounded-3 border bg-light bg-opacity-50 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2"
+                      className="p-2 p-md-3 rounded-3 border bg-light bg-opacity-25 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2"
                     >
                       <div className="flex-grow-1" style={{ maxWidth: "560px" }}>
                         <div className="d-flex align-items-center gap-2 mb-1">
-                          <Badge bg="primary" style={{ fontSize: "0.7rem" }}>
-                            {cat ? cat.name : `Category #${item.categoryId}`}
-                          </Badge>
+                          <span className="badge bg-secondary-subtle text-secondary border small" style={{ fontSize: "0.7rem" }}>
+                            {cat ? cat.name : `#${item.categoryId}`}
+                          </span>
                           {item.status === 1 ? (
-                            <span className="badge-active" style={{ fontSize: "0.65rem", padding: "0.2rem 0.5rem" }}>
-                              Published
+                            <span className="badge-active" style={{ fontSize: "0.65rem", padding: "0.15rem 0.45rem" }}>
+                              Xuất bản
                             </span>
                           ) : (
-                            <span className="badge-inactive" style={{ fontSize: "0.65rem", padding: "0.2rem 0.5rem" }}>
-                              Draft
+                            <span className="badge-inactive" style={{ fontSize: "0.65rem", padding: "0.15rem 0.45rem" }}>
+                              Nháp
                             </span>
                           )}
                         </div>
-                        <h6 className="fw-bold text-dark mb-1 text-truncate">{item.title}</h6>
+                        <h6 className="fw-semibold text-dark mb-1 text-truncate" style={{ fontSize: "0.95rem" }}>{item.title}</h6>
                         <p className="text-muted small mb-0 text-truncate">{item.content}</p>
                       </div>
                       <div className="text-sm-end text-muted small flex-shrink-0">
@@ -171,36 +160,36 @@ export default function DashboardPage({ categories, news, users, onSelectTab }) 
           <div className="d-flex flex-column gap-3">
             {/* Quick Actions Card */}
             <div className="custom-card p-3">
-              <h6 className="fw-bold mb-3 pb-2 border-bottom">Thao Tác Nhanh (Quick Actions)</h6>
+              <h6 className="fw-bold mb-3 pb-2 border-bottom text-dark">Thao tác nhanh</h6>
               <div className="d-grid gap-2">
-                <Button variant="outline-primary" className="text-start d-flex align-items-center gap-2" onClick={() => onSelectTab("news")}>
-                  <span>✍️</span> Soạn bài báo mới
+                <Button variant="outline-primary" size="sm" className="text-start d-flex align-items-center gap-2 py-2" onClick={() => onSelectTab("news")}>
+                  <span>✍️</span> Viết bài báo mới
                 </Button>
-                <Button variant="outline-secondary" className="text-start d-flex align-items-center gap-2" onClick={() => onSelectTab("categories")}>
+                <Button variant="outline-secondary" size="sm" className="text-start d-flex align-items-center gap-2 py-2" onClick={() => onSelectTab("categories")}>
                   <span>📁</span> Thêm danh mục mới
                 </Button>
-                <Button variant="outline-info" className="text-start d-flex align-items-center gap-2" onClick={() => onSelectTab("users")}>
-                  <span>👤</span> Quản lý thành viên
+                <Button variant="outline-info" size="sm" className="text-start d-flex align-items-center gap-2 py-2" onClick={() => onSelectTab("users")}>
+                  <span>👤</span> Quản lý người dùng
                 </Button>
-                <Button variant="outline-dark" className="text-start d-flex align-items-center gap-2" onClick={() => onSelectTab("settings")}>
-                  <span>⚙️</span> Cài đặt & Khôi phục dữ liệu
+                <Button variant="outline-dark" size="sm" className="text-start d-flex align-items-center gap-2 py-2" onClick={() => onSelectTab("settings")}>
+                  <span>⚙️</span> Cài đặt & khôi phục dữ liệu
                 </Button>
               </div>
             </div>
 
             {/* Categories Status Summary */}
             <div className="custom-card p-3">
-              <h6 className="fw-bold mb-3 pb-2 border-bottom">Danh Mục Nổi Bật (Categories)</h6>
+              <h6 className="fw-bold mb-3 pb-2 border-bottom text-dark">Phân bổ danh mục</h6>
               <div className="d-flex flex-column gap-2">
-                {categories.map((c) => {
+                {categories.slice(0, 5).map((c) => {
                   const count = news.filter((n) => Number(n.categoryId) === Number(c.id)).length;
                   return (
                     <div key={c.id} className="d-flex align-items-center justify-content-between p-2 rounded bg-light small">
-                      <span className="fw-semibold text-dark text-truncate" style={{ maxWidth: "180px" }}>
+                      <span className="fw-medium text-dark text-truncate" style={{ maxWidth: "180px" }}>
                         {c.name}
                       </span>
-                      <span className="badge bg-white text-primary border">
-                        {count} bài viết
+                      <span className="badge bg-white text-secondary border">
+                        {count} bài
                       </span>
                     </div>
                   );

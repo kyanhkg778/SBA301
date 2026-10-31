@@ -1,21 +1,25 @@
 export default function Sidebar({ activeTab, onSelectTab }) {
   const menuItems = [
-    { id: "dashboard", label: "Dashboard", icon: "📊", badge: null },
-    { id: "categories", label: "Categories", icon: "📁", badge: null },
-    { id: "news", label: "News Articles", icon: "📰", badge: null },
-    { id: "users", label: "User Management", icon: "👥", badge: null },
-    { id: "settings", label: "System Settings", icon: "⚙️", badge: null }
+    { id: "dashboard", label: "Tổng quan", icon: "📊" },
+    { id: "categories", label: "Danh mục", icon: "📁" },
+    { id: "news", label: "Bài viết", icon: "📰" },
+    { id: "users", label: "Người dùng", icon: "👥" },
+    { id: "settings", label: "Cài đặt", icon: "⚙️" }
   ];
 
   return (
     <aside className="sidebar-container">
-      {/* Brand Header with AI Generated Logo */}
+      {/* Brand Header */}
       <div className="sidebar-brand">
         <img
           src="/logo.svg"
-          alt="FUNewsManagementSystem AI Logo"
+          alt="FUNews Logo"
           className="sidebar-brand-img"
         />
+        <div className="d-flex flex-column">
+          <span className="fw-bold text-white fs-6 lh-1">FUNews</span>
+          <span className="text-secondary small" style={{ fontSize: "0.75rem" }}>Admin Portal</span>
+        </div>
       </div>
 
       {/* Navigation Menu */}
@@ -47,12 +51,9 @@ export default function Sidebar({ activeTab, onSelectTab }) {
         })}
       </nav>
 
-      {/* Student & Course Footer Information */}
+      {/* Simplified Footer */}
       <div className="sidebar-footer">
-        <div className="fw-bold text-white mb-1">FUNews Management</div>
-        <div>SV: Lâm Đăng Kỳ Anh</div>
-        <div>MSSV: CE190574 • Lớp: SE1910</div>
-        <div className="text-secondary small mt-1">SBA301 Assignment 01</div>
+        <div className="text-secondary small">© 2026 FUNews Management</div>
       </div>
     </aside>
   );

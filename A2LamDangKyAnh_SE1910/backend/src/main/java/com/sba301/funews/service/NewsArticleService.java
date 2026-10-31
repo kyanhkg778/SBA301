@@ -139,3 +139,4 @@ public class NewsArticleService {
         newsArticleRepository.delete(existing);
     }
 }
+

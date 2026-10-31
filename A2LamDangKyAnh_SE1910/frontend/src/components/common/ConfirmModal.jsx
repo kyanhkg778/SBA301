@@ -40,3 +40,4 @@ export default function ConfirmModal({ show, title, message, onConfirm, onCancel
     </div>
   );
 }
+

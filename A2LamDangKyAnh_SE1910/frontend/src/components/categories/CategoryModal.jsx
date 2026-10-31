@@ -142,3 +142,4 @@ export default function CategoryModal({ show, mode = 'create', category = null, 
     </div>
   );
 }
+

@@ -167,3 +167,4 @@ public class NewsArticle {
         this.tags = tags;
     }
 }
+

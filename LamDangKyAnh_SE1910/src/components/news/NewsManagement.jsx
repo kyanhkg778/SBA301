@@ -114,12 +114,12 @@ export default function NewsManagement({ news, categories, onAddNews, onUpdateNe
       {/* Filter and Action Bar */}
       <div className="custom-card p-3">
         <Row className="g-2 align-items-center justify-content-between">
-          <Col lg={5} md={6}>
-            <InputGroup>
+          <Col lg={5} md={5}>
+            <InputGroup size="sm">
               <InputGroup.Text className="bg-light border-end-0">🔍</InputGroup.Text>
               <Form.Control
                 type="text"
-                placeholder="Tìm kiếm bài báo theo tiêu đề, nội dung, thẻ tags..."
+                placeholder="Tìm bài viết theo tiêu đề, nội dung, tag..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="border-start-0"
@@ -134,10 +134,11 @@ export default function NewsManagement({ news, categories, onAddNews, onUpdateNe
 
           <Col lg={3} md={3} sm={6}>
             <Form.Select
+              size="sm"
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
             >
-              <option value="all">-- Tất cả danh mục --</option>
+              <option value="all">Tất cả danh mục</option>
               {categories.map((cat) => (
                 <option key={cat.id} value={cat.id}>
                   {cat.name}
@@ -146,20 +147,21 @@ export default function NewsManagement({ news, categories, onAddNews, onUpdateNe
             </Form.Select>
           </Col>
 
-          <Col lg={2} md={3} sm={6}>
+          <Col lg={2} md={2} sm={6}>
             <Form.Select
+              size="sm"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
             >
-              <option value="all">-- Tất cả trạng thái --</option>
-              <option value="1">🟢 Xuất bản (Active)</option>
-              <option value="0">⚪ Bản nháp (Inactive)</option>
+              <option value="all">Tất cả trạng thái</option>
+              <option value="1">Xuất bản</option>
+              <option value="0">Bản nháp</option>
             </Form.Select>
           </Col>
 
-          <Col lg={2} className="text-lg-end mt-2 mt-lg-0">
-            <Button variant="primary" onClick={handleOpenCreate} className="w-100 d-flex align-items-center justify-content-center gap-1">
-              <span>➕</span> Viết Bài Mới
+          <Col lg={2} md={2} className="text-md-end mt-2 mt-md-0">
+            <Button variant="primary" size="sm" onClick={handleOpenCreate} className="w-100 d-flex align-items-center justify-content-center gap-1">
+              <span>+</span> Viết bài
             </Button>
           </Col>
         </Row>
@@ -170,15 +172,15 @@ export default function NewsManagement({ news, categories, onAddNews, onUpdateNe
         {displayedNews.length === 0 ? (
           <div className="empty-state">
             <div className="empty-state-icon">📰</div>
-            <h5 className="fw-semibold">Không tìm thấy bài báo nào</h5>
+            <h6 className="fw-semibold">Không tìm thấy bài viết</h6>
             <p className="text-muted small">
               {searchTerm || categoryFilter !== "all" || statusFilter !== "all"
-                ? "Không có bài báo nào phù hợp với bộ lọc hiện tại."
-                : "Chưa có bài báo nào được tạo. Hãy nhấn 'Viết Bài Mới' để bắt đầu."}
+                ? "Không có bài viết nào phù hợp với bộ lọc hiện tại."
+                : "Chưa có bài viết nào. Hãy nhấn 'Viết bài' để bắt đầu."}
             </p>
             {(searchTerm || categoryFilter !== "all" || statusFilter !== "all") && (
               <Button variant="outline-primary" size="sm" onClick={handleResetFilters}>
-                Đặt lại toàn bộ bộ lọc (Reset Filters)
+                Đặt lại bộ lọc
               </Button>
             )}
           </div>
@@ -187,28 +189,28 @@ export default function NewsManagement({ news, categories, onAddNews, onUpdateNe
             <table className="custom-table">
               <thead>
                 <tr>
-                  <th style={{ width: "70px" }}>ID</th>
-                  <th style={{ minWidth: "280px" }}>Tiêu Đề & Tóm Tắt</th>
-                  <th style={{ width: "170px" }}>Danh Mục</th>
-                  <th style={{ width: "130px" }}>Tác Giả</th>
-                  <th style={{ width: "140px" }}>Trạng Thái</th>
-                  <th style={{ width: "130px" }}>Ngày Đăng</th>
-                  <th style={{ width: "150px" }} className="text-end">Thao Tác</th>
+                  <th style={{ width: "60px" }}>ID</th>
+                  <th style={{ minWidth: "260px" }}>Tiêu đề & Nội dung</th>
+                  <th style={{ width: "150px" }}>Danh mục</th>
+                  <th style={{ width: "120px" }}>Tác giả</th>
+                  <th style={{ width: "120px" }}>Trạng thái</th>
+                  <th style={{ width: "110px" }}>Ngày tạo</th>
+                  <th style={{ width: "130px" }} className="text-end">Thao tác</th>
                 </tr>
               </thead>
               <tbody>
                 {displayedNews.map((item) => (
                   <tr key={item.id}>
-                    <td className="fw-bold text-muted">#{item.id}</td>
+                    <td className="fw-semibold text-muted">#{item.id}</td>
                     <td>
-                      <div className="fw-bold text-dark mb-1">{item.title}</div>
-                      <div className="text-muted small text-truncate" style={{ maxWidth: "420px" }}>
+                      <div className="fw-semibold text-dark mb-1">{item.title}</div>
+                      <div className="text-muted small text-truncate" style={{ maxWidth: "400px" }}>
                         {item.content}
                       </div>
                       {Array.isArray(item.tags) && item.tags.length > 0 && (
                         <div className="d-flex flex-wrap gap-1 mt-1">
                           {item.tags.map((tag, idx) => (
-                            <span key={idx} className="badge bg-light text-secondary border" style={{ fontSize: "0.7rem" }}>
+                            <span key={idx} className="badge bg-light text-secondary border" style={{ fontSize: "0.68rem" }}>
                               #{tag}
                             </span>
                           ))}
@@ -217,24 +219,24 @@ export default function NewsManagement({ news, categories, onAddNews, onUpdateNe
                     </td>
                     <td>
                       <span className="badge bg-light text-primary border">
-                        📁 {getCategoryName(item.categoryId)}
+                        {getCategoryName(item.categoryId)}
                       </span>
                     </td>
                     <td>
-                      <span className="text-dark small fw-semibold">
-                        👤 {item.createdBy || "Admin"}
+                      <span className="text-dark small">
+                        {item.createdBy || "Admin"}
                       </span>
                     </td>
                     <td>
                       {item.status === 1 ? (
                         <span className="badge-active">
                           <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#16a34a" }} />
-                          Published (1)
+                          Xuất bản
                         </span>
                       ) : (
                         <span className="badge-inactive">
                           <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#94a3b8" }} />
-                          Draft (0)
+                          Bản nháp
                         </span>
                       )}
                     </td>
@@ -242,20 +244,22 @@ export default function NewsManagement({ news, categories, onAddNews, onUpdateNe
                       {item.createdAt || "Hôm nay"}
                     </td>
                     <td className="text-end">
-                      <div className="d-flex justify-content-end gap-2">
+                      <div className="d-flex justify-content-end gap-1">
                         <Button
-                          variant="outline-primary"
+                          variant="light"
                           size="sm"
+                          className="border text-primary py-1 px-2"
                           onClick={() => handleOpenEdit(item)}
-                          title="Sửa bài báo"
+                          title="Sửa bài viết"
                         >
                           ✏️ Sửa
                         </Button>
                         <Button
-                          variant="outline-danger"
+                          variant="light"
                           size="sm"
+                          className="border text-danger py-1 px-2"
                           onClick={() => handleOpenDelete(item)}
-                          title="Xóa bài báo"
+                          title="Xóa bài viết"
                         >
                           🗑️ Xóa
                         </Button>

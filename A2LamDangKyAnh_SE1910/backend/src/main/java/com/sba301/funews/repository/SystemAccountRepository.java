@@ -20,3 +20,4 @@ public interface SystemAccountRepository extends JpaRepository<SystemAccount, Sh
            "LOWER(a.accountEmail) LIKE LOWER(CONCAT('%', :query, '%'))")
     List<SystemAccount> searchAccounts(@Param("query") String query);
 }
+

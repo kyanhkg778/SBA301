@@ -101,3 +101,4 @@ export default function Navbar({ currentUser, activeTab, setActiveTab, onOpenLog
     </nav>
   );
 }
+

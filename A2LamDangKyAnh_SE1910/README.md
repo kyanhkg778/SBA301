@@ -118,3 +118,4 @@ Open your browser and navigate to `http://localhost:5173`.
 | `GET` | `/api/news/history/{staffId}` | Get news history created by staff | Staff |
 | `GET` | `/api/tags` | List all tags | Staff |
 | `POST` | `/api/tags` | Create new tag | Staff |
+

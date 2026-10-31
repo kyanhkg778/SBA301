@@ -69,7 +69,7 @@ body {
 }
 
 .sidebar-container {
-  width: 260px;
+  width: 240px;
   background-color: var(--sidebar-bg);
   color: var(--sidebar-text);
   display: flex;
@@ -81,7 +81,7 @@ body {
 }
 
 .sidebar-brand {
-  padding: 1.25rem 1.5rem;
+  padding: 1rem 1.25rem;
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -89,12 +89,12 @@ body {
 }
 
 .sidebar-brand-img {
-  height: 38px;
+  height: 32px;
   width: auto;
 }
 
 .sidebar-nav {
-  padding: 1rem 0.75rem;
+  padding: 0.85rem 0.65rem;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -104,12 +104,12 @@ body {
 .sidebar-nav-item {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
-  padding: 0.75rem 1rem;
-  border-radius: 10px;
+  gap: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
   color: var(--sidebar-text);
   font-weight: 500;
-  font-size: 0.925rem;
+  font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.15s ease-in-out;
   text-decoration: none;
@@ -129,15 +129,15 @@ body {
 }
 
 .sidebar-nav-icon {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   display: flex;
   align-items: center;
 }
 
 .sidebar-footer {
-  padding: 1rem 1.25rem;
+  padding: 0.85rem 1rem;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-  font-size: 0.775rem;
+  font-size: 0.75rem;
   color: #64748b;
 }
 
@@ -151,10 +151,10 @@ body {
 }
 
 .top-navbar {
-  height: 68px;
+  height: 60px;
   background-color: var(--bg-card);
   border-bottom: 1px solid var(--border-color);
-  padding: 0 2rem;
+  padding: 0 1.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -165,7 +165,7 @@ body {
 }
 
 .content-body {
-  padding: 2rem;
+  padding: 1.5rem;
   flex: 1;
 }
 
@@ -173,17 +173,17 @@ body {
 .custom-card {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-radius: 14px;
+  border-radius: 10px;
   box-shadow: var(--card-shadow);
   transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .stat-card {
-  border-radius: 14px;
-  padding: 1.5rem;
+  border-radius: 10px;
+  padding: 1.15rem;
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: 1rem;
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
   box-shadow: var(--card-shadow);
@@ -196,13 +196,13 @@ body {
 }
 
 .stat-icon-wrapper {
-  width: 52px;
-  height: 52px;
-  border-radius: 12px;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
 }
 
 /* Badges */
@@ -259,11 +259,11 @@ body {
 .custom-table th {
   background-color: rgba(0, 0, 0, 0.02);
   color: var(--text-muted);
-  font-size: 0.8rem;
+  font-size: 0.775rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  padding: 1rem 1.25rem;
+  padding: 0.75rem 1rem;
   border-bottom: 1px solid var(--border-color);
 }
 
@@ -272,10 +272,10 @@ body {
 }
 
 .custom-table td {
-  padding: 1rem 1.25rem;
+  padding: 0.75rem 1rem;
   vertical-align: middle;
   border-bottom: 1px solid var(--border-color);
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   color: var(--text-main);
 }
 

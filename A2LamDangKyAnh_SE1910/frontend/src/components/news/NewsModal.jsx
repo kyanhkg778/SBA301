@@ -334,3 +334,4 @@ export default function NewsModal({ show, mode = 'create', article = null, curre
     </div>
   );
 }
+

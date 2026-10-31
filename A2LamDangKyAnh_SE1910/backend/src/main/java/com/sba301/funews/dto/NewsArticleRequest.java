@@ -113,3 +113,4 @@ public class NewsArticleRequest {
         this.tagIds = tagIds;
     }
 }
+

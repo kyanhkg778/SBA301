@@ -132,3 +132,4 @@ export default function LoginModal({ show, onClose, onLoginSuccess }) {
     </div>
   );
 }
+

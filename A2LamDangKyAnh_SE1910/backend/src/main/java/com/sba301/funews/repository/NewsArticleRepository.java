@@ -40,3 +40,4 @@ public interface NewsArticleRepository extends JpaRepository<NewsArticle, String
             @Param("createdById") Short createdById
     );
 }
+

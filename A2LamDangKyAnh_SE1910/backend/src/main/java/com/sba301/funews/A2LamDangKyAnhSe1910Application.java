@@ -10,3 +10,4 @@ public class A2LamDangKyAnhSe1910Application {
         SpringApplication.run(A2LamDangKyAnhSe1910Application.class, args);
     }
 }
+

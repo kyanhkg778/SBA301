@@ -14,24 +14,24 @@ export default function SettingsPage({ currentUser, theme, onToggleTheme, onRese
   };
 
   return (
-    <div className="d-flex flex-column gap-4">
+    <div className="d-flex flex-column gap-3">
       {successMsg && (
-        <Alert variant="success" dismissible onClose={() => setSuccessMsg("")}>
+        <Alert variant="success" dismissible onClose={() => setSuccessMsg("")} className="py-2">
           {successMsg}
         </Alert>
       )}
 
-      <Row className="g-4">
+      <Row className="g-3">
         {/* User Account Profile */}
         <Col md={6}>
-          <div className="custom-card p-4 h-100">
-            <h5 className="fw-bold mb-3 pb-2 border-bottom">👤 Hồ Sơ Người Dùng (User Profile)</h5>
-            <div className="d-flex align-items-center gap-3 mb-4">
+          <div className="custom-card p-3 p-md-4 h-100">
+            <h6 className="fw-bold mb-3 pb-2 border-bottom text-dark">👤 Thông tin tài khoản</h6>
+            <div className="d-flex align-items-center gap-3 mb-3">
               <div
-                className="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold fs-3 shadow"
+                className="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold fs-4 shadow-sm"
                 style={{
-                  width: "64px",
-                  height: "64px",
+                  width: "52px",
+                  height: "52px",
                   background: currentUser?.role === 1
                     ? "linear-gradient(135deg, #4f46e5, #06b6d4)"
                     : "linear-gradient(135deg, #0284c7, #38bdf8)"
@@ -40,9 +40,9 @@ export default function SettingsPage({ currentUser, theme, onToggleTheme, onRese
                 {currentUser?.username?.charAt(0)?.toUpperCase() || "U"}
               </div>
               <div>
-                <h5 className="fw-bold mb-0 text-dark">{currentUser?.fullName || currentUser?.username}</h5>
-                <div className="text-muted small mb-1">{currentUser?.email || "admin@funews.edu.vn"}</div>
-                <div>
+                <h6 className="fw-bold mb-0 text-dark">{currentUser?.fullName || currentUser?.username}</h6>
+                <div className="text-muted small">{currentUser?.email || "admin@funews.edu.vn"}</div>
+                <div className="mt-1">
                   {currentUser?.role === 1 ? (
                     <span className="badge-admin">Administrator (Role 1)</span>
                   ) : (
@@ -60,12 +60,12 @@ export default function SettingsPage({ currentUser, theme, onToggleTheme, onRese
               <div className="d-flex justify-content-between py-1 border-bottom">
                 <span className="text-muted">Quyền hạn:</span>
                 <span className="fw-semibold text-dark">
-                  {currentUser?.role === 1 ? "Toàn quyền quản trị (Full Access)" : "Biên tập & Quản lý tin tức"}
+                  {currentUser?.role === 1 ? "Toàn quyền quản trị" : "Biên tập tin tức"}
                 </span>
               </div>
               <div className="d-flex justify-content-between py-1">
-                <span className="text-muted">Trạng thái phiên đăng nhập:</span>
-                <span className="text-success fw-semibold">🟢 Đang hoạt động (Authenticated)</span>
+                <span className="text-muted">Trạng thái:</span>
+                <span className="text-success fw-semibold">🟢 Đang hoạt động</span>
               </div>
             </div>
           </div>
@@ -73,37 +73,35 @@ export default function SettingsPage({ currentUser, theme, onToggleTheme, onRese
 
         {/* System & Theme Preferences */}
         <Col md={6}>
-          <div className="custom-card p-4 h-100">
-            <h5 className="fw-bold mb-3 pb-2 border-bottom">⚙️ Tùy Chỉnh Giao Diện (Appearance & Theme)</h5>
-            <p className="text-muted small">
-              Chuyển đổi linh hoạt giữa giao diện Sáng (Light) và Tối (Dark) để tối ưu trải nghiệm người dùng. Tùy chọn này được tự động lưu vào bộ nhớ cục bộ.
-            </p>
+          <div className="custom-card p-3 p-md-4 h-100">
+            <h6 className="fw-bold mb-3 pb-2 border-bottom text-dark">⚙️ Tùy chọn hệ thống</h6>
 
             <div className="d-flex align-items-center justify-content-between p-3 border rounded-3 mb-3 bg-light">
               <div>
-                <div className="fw-bold text-dark">Chế độ giao diện (Current Mode)</div>
-                <small className="text-muted">Đang áp dụng: {theme === "dark" ? "Chế độ Tối (Dark)" : "Chế độ Sáng (Light)"}</small>
+                <div className="fw-semibold text-dark small">Giao diện (Theme)</div>
+                <small className="text-muted">Hiện tại: {theme === "dark" ? "Chế độ tối" : "Chế độ sáng"}</small>
               </div>
               <Button
-                variant={theme === "dark" ? "primary" : "outline-primary"}
+                variant={theme === "dark" ? "primary" : "outline-secondary"}
+                size="sm"
                 onClick={onToggleTheme}
-                className="d-flex align-items-center gap-2"
+                className="d-flex align-items-center gap-1"
               >
-                {theme === "dark" ? "☀️ Chuyển sang Light" : "🌙 Chuyển sang Dark"}
+                {theme === "dark" ? "☀️ Sáng" : "🌙 Tối"}
               </Button>
             </div>
 
-            <div className="border-top pt-3 mt-4">
-              <h6 className="fw-bold text-danger mb-2">🗑️ Quản Lý Dữ Liệu Bộ Nhớ (Database Reset)</h6>
-              <p className="text-muted small mb-3">
-                Đặt lại toàn bộ dữ liệu Danh mục, Tin tức và Người dùng về bộ dữ liệu mẫu (Seed Data) ban đầu. Rất hữu ích khi cần kiểm thử lại hoặc xóa dữ liệu nháp.
+            <div className="border-top pt-3">
+              <h6 className="fw-bold text-danger mb-1 small">🗑️ Khôi phục dữ liệu gốc</h6>
+              <p className="text-muted small mb-2">
+                Đặt lại toàn bộ Danh mục, Bài viết và Tài khoản về dữ liệu mẫu ban đầu.
               </p>
               <div className="d-flex align-items-center justify-content-between">
                 <div className="small text-muted">
-                  Hiện có: <strong>{dataCounts?.news || 0}</strong> bài báo, <strong>{dataCounts?.categories || 0}</strong> danh mục, <strong>{dataCounts?.users || 0}</strong> người dùng.
+                  Hiện có: {dataCounts?.news || 0} bài, {dataCounts?.categories || 0} danh mục.
                 </div>
                 <Button variant="outline-danger" size="sm" onClick={() => setShowResetModal(true)}>
-                  Khôi phục dữ liệu gốc
+                  Khôi phục
                 </Button>
               </div>
             </div>
@@ -111,35 +109,15 @@ export default function SettingsPage({ currentUser, theme, onToggleTheme, onRese
         </Col>
       </Row>
 
-      {/* Student & Course Rubric Verification Info */}
-      <div className="custom-card p-4">
-        <h5 className="fw-bold mb-3 pb-2 border-bottom">🎓 Thông Tin Sinh Viên & Hồ Sơ Bài Nộp (Assignment Deliverable)</h5>
-        <Row className="g-3">
-          <Col md={6}>
-            <div className="p-3 bg-light rounded-3 h-100">
-              <div className="fw-bold text-primary mb-2">Thông tin tác giả</div>
-              <ul className="list-unstyled mb-0 small d-flex flex-column gap-1 text-dark">
-                <li>• <strong>Họ và tên:</strong> Lâm Đăng Kỳ Anh</li>
-                <li>• <strong>MSSV:</strong> CE190574</li>
-                <li>• <strong>Lớp học:</strong> SE1910</li>
-                <li>• <strong>Môn học:</strong> SBA301 - Integrate Single Page Application with Spring Boot</li>
-                <li>• <strong>Project:</strong> FUNewsManagementSystem (Assignment 01)</li>
-              </ul>
-            </div>
-          </Col>
-          <Col md={6}>
-            <div className="p-3 bg-light rounded-3 h-100">
-              <div className="fw-bold text-success mb-2">Tuân thủ Rubric Đánh Giá (10.0 Điểm)</div>
-              <ul className="list-unstyled mb-0 small d-flex flex-column gap-1 text-muted">
-                <li>✅ <strong>Problem Understanding:</strong> Bản đồ R01-R12, thực thể, ràng buộc relation.</li>
-                <li>✅ <strong>Solution Design:</strong> Layout chuẩn, State ownership, Immutable updates.</li>
-                <li>✅ <strong>Implementation:</strong> CRUD + Search đầy đủ, Popup Dialog, Delete Confirm.</li>
-                <li>✅ <strong>Testing & Verification:</strong> Test Matrix 35 kịch bản, bao quát Edge cases.</li>
-                <li>✅ <strong>AI Usage:</strong> Logo vector AI, minh bạch quy trình kỹ thuật.</li>
-              </ul>
-            </div>
-          </Col>
-        </Row>
+      {/* Simplified Project Info Footer */}
+      <div className="custom-card p-3 p-md-4">
+        <h6 className="fw-bold mb-2 pb-2 border-bottom text-dark">🎓 Thông tin bài nộp</h6>
+        <div className="small text-muted d-flex flex-wrap gap-4">
+          <div>Sinh viên: <strong className="text-dark">Lâm Đăng Kỳ Anh</strong></div>
+          <div>MSSV: <strong className="text-dark">CE190574</strong></div>
+          <div>Lớp: <strong className="text-dark">SE1910</strong></div>
+          <div>Môn: <strong className="text-dark">SBA301 - Lab & Assignment 01</strong></div>
+        </div>
       </div>
 
       {/* Reset Confirmation Modal */}

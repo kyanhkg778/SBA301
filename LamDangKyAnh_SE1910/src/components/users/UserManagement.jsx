@@ -83,11 +83,11 @@ export default function UserManagement({ users, onAddUser, onUpdateUser, onDelet
       {/* Action Header */}
       <div className="custom-card p-3 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
         <div className="d-flex align-items-center gap-2 flex-grow-1" style={{ maxWidth: "520px" }}>
-          <InputGroup>
+          <InputGroup size="sm">
             <InputGroup.Text className="bg-light border-end-0">🔍</InputGroup.Text>
             <Form.Control
               type="text"
-              placeholder="Tìm kiếm người dùng theo username, họ tên, email..."
+              placeholder="Tìm theo username, họ tên, email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="border-start-0"
@@ -100,22 +100,23 @@ export default function UserManagement({ users, onAddUser, onUpdateUser, onDelet
           </InputGroup>
 
           <Form.Select
-            style={{ width: "160px" }}
+            size="sm"
+            style={{ width: "150px" }}
             value={roleFilter}
             onChange={(e) => setRoleFilter(e.target.value)}
           >
             <option value="all">Tất cả vai trò</option>
-            <option value="1">Admin (1)</option>
-            <option value="2">Staff (2)</option>
+            <option value="1">Admin</option>
+            <option value="2">Staff</option>
           </Form.Select>
         </div>
 
         <div className="d-flex align-items-center gap-2">
-          <Badge bg="secondary" className="px-3 py-2 fs-6">
-            Tổng cộng: {displayedUsers.length} / {users.length}
-          </Badge>
-          <Button variant="primary" onClick={handleOpenCreate} className="d-flex align-items-center gap-2">
-            <span>➕</span> Thêm Tài Khoản (Add User)
+          <span className="text-muted small">
+            Tổng: <strong>{displayedUsers.length}</strong> người dùng
+          </span>
+          <Button variant="primary" size="sm" onClick={handleOpenCreate} className="d-flex align-items-center gap-1 px-3">
+            <span>+</span> Thêm người dùng
           </Button>
         </div>
       </div>
@@ -125,10 +126,10 @@ export default function UserManagement({ users, onAddUser, onUpdateUser, onDelet
         {displayedUsers.length === 0 ? (
           <div className="empty-state">
             <div className="empty-state-icon">👥</div>
-            <h5 className="fw-semibold">Không tìm thấy tài khoản người dùng</h5>
+            <h6 className="fw-semibold">Không tìm thấy người dùng</h6>
             <p className="text-muted small">
               {searchTerm || roleFilter !== "all"
-                ? "Không có tài khoản nào phù hợp với điều kiện tìm kiếm."
+                ? "Không có người dùng nào khớp với tìm kiếm."
                 : "Chưa có tài khoản nào trong hệ thống."}
             </p>
             {(searchTerm || roleFilter !== "all") && (
@@ -140,7 +141,7 @@ export default function UserManagement({ users, onAddUser, onUpdateUser, onDelet
                   setRoleFilter("all");
                 }}
               >
-                Xóa bộ lọc tìm kiếm
+                Xóa tìm kiếm
               </Button>
             )}
           </div>
@@ -149,57 +150,59 @@ export default function UserManagement({ users, onAddUser, onUpdateUser, onDelet
             <table className="custom-table">
               <thead>
                 <tr>
-                  <th style={{ width: "80px" }}>ID</th>
-                  <th style={{ width: "180px" }}>Tên Đăng Nhập</th>
-                  <th>Họ Và Tên</th>
+                  <th style={{ width: "70px" }}>ID</th>
+                  <th style={{ width: "160px" }}>Tài khoản</th>
+                  <th>Họ và tên</th>
                   <th>Email</th>
-                  <th style={{ width: "140px" }}>Vai Trò (Role)</th>
-                  <th style={{ width: "140px" }}>Trạng Thái</th>
-                  <th style={{ width: "160px" }} className="text-end">Thao Tác</th>
+                  <th style={{ width: "120px" }}>Vai trò</th>
+                  <th style={{ width: "130px" }}>Trạng thái</th>
+                  <th style={{ width: "140px" }} className="text-end">Thao tác</th>
                 </tr>
               </thead>
               <tbody>
                 {displayedUsers.map((u) => (
                   <tr key={u.id}>
-                    <td className="fw-bold text-muted">#{u.id}</td>
+                    <td className="fw-semibold text-muted">#{u.id}</td>
                     <td>
-                      <div className="fw-bold text-dark">{u.username}</div>
+                      <div className="fw-semibold text-dark">{u.username}</div>
                     </td>
                     <td>{u.fullName || "-"}</td>
                     <td className="text-muted small">{u.email || "-"}</td>
                     <td>
                       {Number(u.role) === 1 ? (
-                        <span className="badge-admin">🛡️ Admin (1)</span>
+                        <span className="badge-admin">Admin</span>
                       ) : (
-                        <span className="badge-staff">✍️ Staff (2)</span>
+                        <span className="badge-staff">Staff</span>
                       )}
                     </td>
                     <td>
                       {Number(u.status) === 1 ? (
                         <span className="badge-active">
                           <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#16a34a" }} />
-                          Active (1)
+                          Hoạt động
                         </span>
                       ) : (
                         <span className="badge-inactive">
                           <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#94a3b8" }} />
-                          Inactive (0)
+                          Tạm khóa
                         </span>
                       )}
                     </td>
                     <td className="text-end">
-                      <div className="d-flex justify-content-end gap-2">
+                      <div className="d-flex justify-content-end gap-1">
                         <Button
-                          variant="outline-primary"
+                          variant="light"
                           size="sm"
+                          className="border text-primary py-1 px-2"
                           onClick={() => handleOpenEdit(u)}
                           title="Sửa thông tin"
                         >
                           ✏️ Sửa
                         </Button>
                         <Button
-                          variant="outline-danger"
+                          variant="light"
                           size="sm"
+                          className="border text-danger py-1 px-2"
                           onClick={() => handleOpenDelete(u)}
                           title="Xóa tài khoản"
                           disabled={currentUser && currentUser.username === u.username}

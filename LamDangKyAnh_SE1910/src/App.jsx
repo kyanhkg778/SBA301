@@ -21,7 +21,6 @@ export default function App() {
   // Lưu tab màn hình đang được chọn (dashboard, categories, news, users, settings)
   const [activeTab, setActiveTab] = useState("dashboard");
 
-  // Lưu theme giao diện hiện tại ("light" hoặc "dark")
   const [theme, setTheme] = useState(() => storageService.getTheme());
 
   // Dữ liệu thực thể chính của hệ thống, lấy dữ liệu đã lưu từ LocalStorage

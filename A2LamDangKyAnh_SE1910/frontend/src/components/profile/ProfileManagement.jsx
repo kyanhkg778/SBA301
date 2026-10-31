@@ -150,3 +150,4 @@ export default function ProfileManagement({ currentUser, onProfileUpdated }) {
     </div>
   );
 }
+

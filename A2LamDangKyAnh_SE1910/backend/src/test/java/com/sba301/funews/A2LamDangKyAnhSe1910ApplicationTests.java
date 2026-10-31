@@ -10,3 +10,4 @@ class A2LamDangKyAnhSe1910ApplicationTests {
     void contextLoads() {
     }
 }
+
