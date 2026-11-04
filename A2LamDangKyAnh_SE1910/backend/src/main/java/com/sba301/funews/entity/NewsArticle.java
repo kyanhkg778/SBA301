@@ -61,12 +61,7 @@ public class NewsArticle {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime modifiedDate;
 
-    // =========================================================================
-    // [LUỒNG 5 - QUAN HỆ NHIỀU - NHIỀU]: ÁNH XẠ BẢNG TRUNG GIAN NewsTag (Many-to-Many)
-    // Một bài viết có nhiều thẻ Tag, một thẻ Tag thuộc về nhiều bài viết.
-    // FetchType.EAGER: Tải luôn danh sách Tags để Jackson serialize sang JSON không bị LazyException.
-    // Set<Tag>: Đảm bảo không trùng lặp các thẻ tag trong cùng một bài viết.
-    // =========================================================================
+    // [Luồng 5]: Quan hệ Many-to-Many giữa bài viết và tags qua bảng trung gian NewsTag
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "NewsTag",
