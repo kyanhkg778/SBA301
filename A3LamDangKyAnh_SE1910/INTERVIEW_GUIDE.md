@@ -254,43 +254,36 @@ Khi giảng viên đặt tình huống: *"Nếu muốn thêm chức năng X thì
 
 ---
 
-## PHẦN 7: BỘ ẢNH CHỤP MÀN HÌNH MINH CHỨNG CÁC LUỒNG TEST (SCREENSHOTS FOR INTERVIEW)
+## PHẦN 7: BỘ ẢNH CHỤP MÀN HÌNH MINH CHỨNG 14 LUỒNG TEST ĐẦY ĐỦ (FULL TEST FLOW SCREENSHOTS)
 
-Dưới đây là các ảnh chụp màn hình ghi lại toàn bộ các luồng kiểm thử giao diện thực tế của hệ thống FUMiniHotel, phục vụ vấn đáp và minh chứng tiêu chí C3 (Functional Implementation):
+Dưới đây là bộ ảnh chụp màn hình ghi lại toàn bộ 14 luồng kiểm thử giao diện và popup modal thực tế của hệ thống FUMiniHotel, bao phủ 100% yêu cầu chức năng của đề bài phục vụ vấn đáp tiêu chí C3 (Functional Implementation):
 
-### 1. Màn hình Khách xem danh sách phòng công khai (Public Rooms)
-- **Mục đích test:** Kiểm tra quyền truy cập công khai không cần token (`GET /api/rooms`), lọc theo loại phòng, tìm kiếm theo số phòng/mô tả, và chỉ hiển thị phòng có `RoomStatus = 1 (Active)`.
-- **Đường dẫn file ảnh:** `docs/screenshots/01_public_rooms.png`
-- ![Public Rooms](docs/screenshots/01_public_rooms.png)
+### 1. Luồng Khách vãng lai xem phòng công khai (Public Rooms)
+- **Ảnh 1a - Danh sách phòng công khai (`01_public_rooms.png`):** Truy cập không cần token, lọc theo loại phòng, tìm kiếm theo số phòng/mô tả, chỉ hiện phòng `Active (1)`.
+- **Ảnh 1b - Popup Modal xem chi tiết phòng (`01b_public_room_detail_modal.png`):** Khách xem chi tiết tiện nghi phòng, sức chứa tối đa, giá thuê và mô tả đầy đủ.
 
-### 2. Màn hình Đăng nhập (Login Authentication)
-- **Mục đích test:** Giao diện xác thực JWT kép với 2 nút demo truy cập nhanh (Staff từ `application.properties` và Customer từ cơ sở dữ liệu `Customer`).
-- **Đường dẫn file ảnh:** `docs/screenshots/02_login_screen.png`
-- ![Login Screen](docs/screenshots/02_login_screen.png)
+### 2. Luồng Xác thực & Đăng ký (Authentication)
+- **Ảnh 2a - Màn hình Đăng nhập JWT (`02_login_screen.png`):** Form đăng nhập với 2 nút demo truy cập nhanh cho Staff (`application.properties`) và Customer (CSDL SQL Server).
+- **Ảnh 2b - Màn hình Đăng ký tài khoản (`02b_register_screen.png`):** Khách hàng mới tự đăng ký tài khoản với họ tên, email, ngày sinh, số điện thoại và mật khẩu mã hóa BCrypt.
 
-### 3. Màn hình Khách hàng đặt nhiều phòng cùng lúc (Multi-room Booking)
-- **Mục đích test:** Khách hàng chọn ngày nhận/trả phòng, tích chọn 1 hoặc nhiều phòng trống, hệ thống tự động tính số ngày và tổng tiền dự kiến, sau đó gửi `POST /api/bookings` dưới dạng Transaction.
-- **Đường dẫn file ảnh:** `docs/screenshots/03_customer_booking.png`
-- ![Customer Booking](docs/screenshots/03_customer_booking.png)
+### 3. Luồng Khách hàng đặt nhiều phòng (Customer Multi-Booking)
+- **Ảnh 3 - Đặt nhiều phòng cùng lúc (`03_customer_booking.png`):** Khách chọn ngày nhận/trả phòng, tích chọn 2 phòng cùng lúc, hệ thống tự động tính số ngày và tổng tiền dự kiến theo bảng tóm tắt đơn.
 
-### 4. Màn hình Lịch sử đơn đặt phòng của Khách hàng (Booking History)
-- **Mục đích test:** Khách hàng xem danh sách các đơn đã đặt (`GET /api/bookings/my-history`) và mở modal xem chi tiết từng phòng đã thuê trong đơn (`BookingDetail`).
-- **Đường dẫn file ảnh:** `docs/screenshots/04_customer_history.png`
-- ![Customer History](docs/screenshots/04_customer_history.png)
+### 4. Luồng Quản lý Lịch sử đơn & Hồ sơ cá nhân của Khách hàng
+- **Ảnh 4a - Lịch sử đặt phòng (`04_customer_history.png`):** Danh sách các đơn đặt phòng của khách hàng và trạng thái đơn.
+- **Ảnh 4b - Quản lý Hồ sơ cá nhân (`04b_customer_profile.png`):** Khách hàng xem và cập nhật thông tin cá nhân (họ tên, ngày sinh, số điện thoại, đổi mật khẩu).
 
-### 5. Màn hình Staff Quản lý phòng & Quy tắc Xóa phòng (Staff Room Management)
-- **Mục đích test:** Nhân viên thực hiện Thêm, Sửa, Xóa phòng. Xóa phòng kiểm tra logic đặc thù: phòng đã có đơn thì chuyển `RoomStatus = 0`, phòng chưa có đơn thì xóa khỏi database.
-- **Đường dẫn file ảnh:** `docs/screenshots/05_staff_rooms.png`
-- ![Staff Rooms](docs/screenshots/05_staff_rooms.png)
+### 5. Luồng Staff Quản lý phòng & Quy tắc Xóa phòng (Staff Room Management)
+- **Ảnh 5a - Danh sách phòng toàn diện (`05_staff_rooms.png`):** Nhân viên xem tất cả các phòng (cả Active và Inactive), lọc và tìm kiếm.
+- **Ảnh 5b - Modal Thêm / Chỉnh sửa phòng (`05b_staff_room_modal.png`):** Form nhập số phòng, loại phòng, sức chứa, giá tiền, mô tả chi tiết.
+- **Ảnh 5c - Modal Xóa phòng kiểm tra logic đặc thù (`05c_staff_room_delete_rule.png`):** Cảnh báo nghiệp vụ rõ ràng: nếu phòng đã từng có đơn đặt (`BookingDetail`) thì chỉ đổi `RoomStatus = 0`, nếu chưa từng có thì xóa vĩnh viễn khỏi CSDL.
 
-### 6. Màn hình Staff Quản lý khách hàng (Staff Customer Management)
-- **Mục đích test:** Nhân viên xem danh sách khách hàng (`GET /api/staff/customers`), tìm kiếm khách hàng, thêm mới hoặc cập nhật hồ sơ khách hàng.
-- **Đường dẫn file ảnh:** `docs/screenshots/06_staff_customers.png`
-- ![Staff Customers](docs/screenshots/06_staff_customers.png)
+### 6. Luồng Staff Quản lý khách hàng (Staff Customer Management)
+- **Ảnh 6a - Danh sách khách hàng (`06_staff_customers.png`):** Nhân viên xem danh sách khách hàng, thông tin liên lạc và trạng thái tài khoản.
+- **Ảnh 6b - Modal Thêm / Sửa khách hàng (`06b_staff_customer_modal.png`):** Form nhập thông tin khách hàng, gán trạng thái Active/Inactive.
 
-### 7. Màn hình Staff Quản lý đơn đặt phòng (Staff Booking Management)
-- **Mục đích test:** Nhân viên xem toàn bộ đơn đặt phòng của khách sạn (`GET /api/staff/bookings`), lọc theo trạng thái đơn (Active/Cancelled) và cập nhật trạng thái đơn.
-- **Đường dẫn file ảnh:** `docs/screenshots/07_staff_bookings.png`
-- ![Staff Bookings](docs/screenshots/07_staff_bookings.png)
+### 7. Luồng Staff Quản lý đơn đặt phòng (Staff Booking Management)
+- **Ảnh 7a - Danh sách toàn bộ đơn đặt phòng (`07_staff_bookings.png`):** Nhân viên xem tất cả đơn của khách sạn, lọc theo trạng thái đơn và khoảng ngày.
+- **Ảnh 7b - Modal Chi tiết đơn & Cập nhật trạng thái (`07b_staff_booking_detail_modal.png`):** Xem chi tiết từng phòng trong đơn và cập nhật trạng thái đơn (Active/Completed/Cancelled).
 
 
