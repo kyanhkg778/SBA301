@@ -27,6 +27,7 @@
 4. [PHẦN 4: BỘ CÂU HỎI PHỎNG VẤN CHUYÊN SÂU & ĐÁP ÁN CHUẨN (Q&A)](#phần-4-bộ-câu-hỏi-phỏng-vấn-chuyên-sâu)
 5. [PHẦN 5: KỊCH BẢN LIVE MODIFICATION NẾU ĐƯỢC YÊU CẦU](#phần-5-kịch-bản-live-modification)
 6. [PHẦN 6: CHECKLIST 5 PHÚT TRƯỚC PHÒNG PHỎNG VẤN](#phần-6-checklist-5-phút-trước-phòng-phỏng-vấn)
+7. [PHẦN 7: BỘ ẢNH CHỤP MÀN HÌNH MINH CHỨNG CÁC LUỒNG TEST](#phần-7-bộ-ảnh-chụp-màn-hình-minh-chứng-các-luồng-test)
 
 ---
 
@@ -250,3 +251,46 @@ Khi giảng viên đặt tình huống: *"Nếu muốn thêm chức năng X thì
   - Customer: `customer@fuminihotel.com` / `123456`
 - [x] **GitHub Repo:** Mở sẵn trang repo `https://github.com/kyanhkg778/SBA301` và tab Commits để sẵn sàng chứng minh tiến trình phát triển cá nhân theo tiêu chí C2.
 - [x] **Tự tin & Rõ ràng:** Trả lời theo khung chuẩn, nêu bật được việc giải quyết bài toán và bảo mật RESTful API với Spring Boot 3 và JWT.
+
+---
+
+## PHẦN 7: BỘ ẢNH CHỤP MÀN HÌNH MINH CHỨNG CÁC LUỒNG TEST (SCREENSHOTS FOR INTERVIEW)
+
+Dưới đây là các ảnh chụp màn hình ghi lại toàn bộ các luồng kiểm thử giao diện thực tế của hệ thống FUMiniHotel, phục vụ vấn đáp và minh chứng tiêu chí C3 (Functional Implementation):
+
+### 1. Màn hình Khách xem danh sách phòng công khai (Public Rooms)
+- **Mục đích test:** Kiểm tra quyền truy cập công khai không cần token (`GET /api/rooms`), lọc theo loại phòng, tìm kiếm theo số phòng/mô tả, và chỉ hiển thị phòng có `RoomStatus = 1 (Active)`.
+- **Đường dẫn file ảnh:** `docs/screenshots/01_public_rooms.png`
+- ![Public Rooms](docs/screenshots/01_public_rooms.png)
+
+### 2. Màn hình Đăng nhập (Login Authentication)
+- **Mục đích test:** Giao diện xác thực JWT kép với 2 nút demo truy cập nhanh (Staff từ `application.properties` và Customer từ cơ sở dữ liệu `Customer`).
+- **Đường dẫn file ảnh:** `docs/screenshots/02_login_screen.png`
+- ![Login Screen](docs/screenshots/02_login_screen.png)
+
+### 3. Màn hình Khách hàng đặt nhiều phòng cùng lúc (Multi-room Booking)
+- **Mục đích test:** Khách hàng chọn ngày nhận/trả phòng, tích chọn 1 hoặc nhiều phòng trống, hệ thống tự động tính số ngày và tổng tiền dự kiến, sau đó gửi `POST /api/bookings` dưới dạng Transaction.
+- **Đường dẫn file ảnh:** `docs/screenshots/03_customer_booking.png`
+- ![Customer Booking](docs/screenshots/03_customer_booking.png)
+
+### 4. Màn hình Lịch sử đơn đặt phòng của Khách hàng (Booking History)
+- **Mục đích test:** Khách hàng xem danh sách các đơn đã đặt (`GET /api/bookings/my-history`) và mở modal xem chi tiết từng phòng đã thuê trong đơn (`BookingDetail`).
+- **Đường dẫn file ảnh:** `docs/screenshots/04_customer_history.png`
+- ![Customer History](docs/screenshots/04_customer_history.png)
+
+### 5. Màn hình Staff Quản lý phòng & Quy tắc Xóa phòng (Staff Room Management)
+- **Mục đích test:** Nhân viên thực hiện Thêm, Sửa, Xóa phòng. Xóa phòng kiểm tra logic đặc thù: phòng đã có đơn thì chuyển `RoomStatus = 0`, phòng chưa có đơn thì xóa khỏi database.
+- **Đường dẫn file ảnh:** `docs/screenshots/05_staff_rooms.png`
+- ![Staff Rooms](docs/screenshots/05_staff_rooms.png)
+
+### 6. Màn hình Staff Quản lý khách hàng (Staff Customer Management)
+- **Mục đích test:** Nhân viên xem danh sách khách hàng (`GET /api/staff/customers`), tìm kiếm khách hàng, thêm mới hoặc cập nhật hồ sơ khách hàng.
+- **Đường dẫn file ảnh:** `docs/screenshots/06_staff_customers.png`
+- ![Staff Customers](docs/screenshots/06_staff_customers.png)
+
+### 7. Màn hình Staff Quản lý đơn đặt phòng (Staff Booking Management)
+- **Mục đích test:** Nhân viên xem toàn bộ đơn đặt phòng của khách sạn (`GET /api/staff/bookings`), lọc theo trạng thái đơn (Active/Cancelled) và cập nhật trạng thái đơn.
+- **Đường dẫn file ảnh:** `docs/screenshots/07_staff_bookings.png`
+- ![Staff Bookings](docs/screenshots/07_staff_bookings.png)
+
+
