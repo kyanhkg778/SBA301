@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { accountService } from '../../services/api';
+import AlertBanner from '../../components/common/AlertBanner';
 
-export default function ProfileManagement({ currentUser, onProfileUpdated }) {
+export default function ProfilePage({ currentUser, onProfileUpdated }) {
   const [name, setName] = useState(currentUser?.accountName || '');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -59,19 +60,8 @@ export default function ProfileManagement({ currentUser, onProfileUpdated }) {
           </div>
         </div>
 
-        {message && (
-          <div className="alert alert-success d-flex align-items-center gap-2 py-2" role="alert">
-            <i className="bi bi-check-circle-fill"></i>
-            <div>{message}</div>
-          </div>
-        )}
-
-        {error && (
-          <div className="alert alert-danger d-flex align-items-center gap-2 py-2" role="alert">
-            <i className="bi bi-exclamation-octagon-fill"></i>
-            <div>{error}</div>
-          </div>
-        )}
+        <AlertBanner type="success" message={message} onClose={() => setMessage('')} />
+        <AlertBanner type="danger" message={error} onClose={() => setError('')} />
 
         <form onSubmit={handleSubmit}>
           {/* Read-only info */}
@@ -150,4 +140,3 @@ export default function ProfileManagement({ currentUser, onProfileUpdated }) {
     </div>
   );
 }
-

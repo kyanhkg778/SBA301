@@ -234,7 +234,7 @@ Màn hình công khai cho phép sinh viên, giảng viên và công chúng đọ
 * **Mục đích:** Khách truy cập xem danh sách tin tức đã xuất bản mà không cần tài khoản.
 * **Trigger:** Khi mở ứng dụng tại tab `public` hoặc click nút "Public News" trên Navbar.
 * **Trace flow qua mã nguồn:**
-  1. **Frontend:** [PublicNewsView.jsx](file:///d:/Ky7_FA2026/SBA301/A2LamDangKyAnh_SE1910/frontend/src/components/public/PublicNewsView.jsx#L20-L36) gọi hook `useEffect`, thực thi:
+  1. **Frontend:** [PublicNewsPage.jsx](file:///d:/Ky7_FA2026/SBA301/A2LamDangKyAnh_SE1910/frontend/src/pages/public/PublicNewsPage.jsx#L20-L36) gọi hook `useEffect`, thực thi:
      ```javascript
      const [newsData, catData] = await Promise.all([
        newsService.getPublic(),
@@ -268,7 +268,7 @@ Màn hình công khai cho phép sinh viên, giảng viên và công chúng đọ
 * **Mục đích:** Kiểm tra thông tin đăng nhập và phân quyền Admin/Staff.
 * **Trigger:** Người dùng điền Email, Password trong LoginModal và click "Sign In".
 * **Trace flow qua mã nguồn:**
-  1. **Frontend:** [LoginModal.jsx](file:///d:/Ky7_FA2026/SBA301/A2LamDangKyAnh_SE1910/frontend/src/components/auth/LoginModal.jsx#L18-L33) gọi `authService.login(email, password)`.
+  1. **Frontend:** [LoginModal.jsx](file:///d:/Ky7_FA2026/SBA301/A2LamDangKyAnh_SE1910/frontend/src/components/modals/LoginModal.jsx#L18-L33) gọi `authService.login(email, password)`.
   2. **Axios Client:** [api.js](file:///d:/Ky7_FA2026/SBA301/A2LamDangKyAnh_SE1910/frontend/src/services/api.js#L29-L38) gửi `POST http://localhost:8080/api/auth/login` với body JSON.
   3. **Backend Controller:** [AuthController.java](file:///d:/Ky7_FA2026/SBA301/A2LamDangKyAnh_SE1910/backend/src/main/java/com/sba301/funews/controller/AuthController.java#L18-L21):
      ```java
@@ -290,7 +290,7 @@ Màn hình công khai cho phép sinh viên, giảng viên và công chúng đọ
 * **Mục đích:** Thực hiện nghiệp vụ trong PDF: *"the delete action will delete an account in the case this account is not belong to any news articles (created), if the account is already created any news article, cannot delete."*
 * **Trigger:** Admin click nút Delete tại một dòng tài khoản trong bảng Account Management và xác nhận trong ConfirmModal.
 * **Trace flow qua mã nguồn:**
-  1. **Frontend:** [AccountManagement.jsx](file:///d:/Ky7_FA2026/SBA301/A2LamDangKyAnh_SE1910/frontend/src/components/accounts/AccountManagement.jsx#L71-L86) gọi `accountService.delete(id)`.
+  1. **Frontend:** [AccountManagementPage.jsx](file:///d:/Ky7_FA2026/SBA301/A2LamDangKyAnh_SE1910/frontend/src/pages/accounts/AccountManagementPage.jsx#L71-L86) gọi `accountService.delete(id)`.
   2. **Backend Controller:** [SystemAccountController.java](file:///d:/Ky7_FA2026/SBA301/A2LamDangKyAnh_SE1910/backend/src/main/java/com/sba301/funews/controller/SystemAccountController.java#L43-L47):
      ```java
      @DeleteMapping("/{id}")
@@ -345,7 +345,7 @@ Màn hình công khai cho phép sinh viên, giảng viên và công chúng đọ
 * **Mục đích:** Staff đăng tin bài mới hoặc cập nhật nội dung bài viết, phân loại danh mục và đính kèm nhiều thẻ tags (Quan hệ Many-to-Many).
 * **Trigger:** Staff nhập thông tin vào `NewsModal.jsx` và bấm "Publish Article" hoặc "Save Changes".
 * **Trace flow qua mã nguồn:**
-  1. **Frontend:** [NewsModal.jsx](file:///d:/Ky7_FA2026/SBA301/A2LamDangKyAnh_SE1910/frontend/src/components/news/NewsModal.jsx#L118-L136) thu thập form state gồm `tagIds: [1, 2]`, `categoryId: 1`, `createdById: currentUser.accountId`.
+  1. **Frontend:** [NewsModal.jsx](file:///d:/Ky7_FA2026/SBA301/A2LamDangKyAnh_SE1910/frontend/src/components/modals/NewsModal.jsx#L118-L136) thu thập form state gồm `tagIds: [1, 2]`, `categoryId: 1`, `createdById: currentUser.accountId`.
   2. **Backend Controller:** [NewsArticleController.java](file:///d:/Ky7_FA2026/SBA301/A2LamDangKyAnh_SE1910/backend/src/main/java/com/sba301/funews/controller/NewsArticleController.java#L45-L53).
   3. **Backend Service:** [NewsArticleService.java](file:///d:/Ky7_FA2026/SBA301/A2LamDangKyAnh_SE1910/backend/src/main/java/com/sba301/funews/service/NewsArticleService.java#L50-L89):
      ```java
@@ -376,7 +376,7 @@ Màn hình công khai cho phép sinh viên, giảng viên và công chúng đọ
 * **Mục đích:** Đáp ứng yêu cầu: *"View news history created by him/her"*.
 * **Trigger:** Staff click vào tab "My History" trên thanh Navbar.
 * **Trace flow qua mã nguồn:**
-  1. **Frontend:** [NewsHistory.jsx](file:///d:/Ky7_FA2026/SBA301/A2LamDangKyAnh_SE1910/frontend/src/components/profile/NewsHistory.jsx#L19-L30) gọi API `newsService.getStaffHistory(currentUser.accountId)`.
+  1. **Frontend:** [NewsHistoryPage.jsx](file:///d:/Ky7_FA2026/SBA301/A2LamDangKyAnh_SE1910/frontend/src/pages/profile/NewsHistoryPage.jsx#L19-L30) gọi API `newsService.getStaffHistory(currentUser.accountId)`.
   2. **Backend Controller:** [NewsArticleController.java](file:///d:/Ky7_FA2026/SBA301/A2LamDangKyAnh_SE1910/backend/src/main/java/com/sba301/funews/controller/NewsArticleController.java#L35-L38):
      `GET /api/news/history/{staffId}`.
   3. **Backend Repository:** [NewsArticleRepository.java](file:///d:/Ky7_FA2026/SBA301/A2LamDangKyAnh_SE1910/backend/src/main/java/com/sba301/funews/repository/NewsArticleRepository.java#L22):
@@ -482,7 +482,7 @@ Màn hình công khai cho phép sinh viên, giảng viên và công chúng đọ
   ```java
   @Size(min = 10, max = 400, message = "News title must be at least 10 characters")
   ```
-* **Bước 2 (Frontend):** Mở [NewsModal.jsx](file:///d:/Ky7_FA2026/SBA301/A2LamDangKyAnh_SE1910/frontend/src/components/news/NewsModal.jsx#L62). Bổ sung điều kiện trong hàm `validate()`:
+* **Bước 2 (Frontend):** Mở [NewsModal.jsx](file:///d:/Ky7_FA2026/SBA301/A2LamDangKyAnh_SE1910/frontend/src/components/modals/NewsModal.jsx#L62). Bổ sung điều kiện trong hàm `validate()`:
   ```javascript
   if (!formData.newsTitle.trim()) {
     err.newsTitle = 'Article title is required.';
@@ -512,5 +512,5 @@ Màn hình công khai cho phép sinh viên, giảng viên và công chúng đọ
   - [ ] Staff: `staff@funews.com` | `staff123`
 - [ ] **4. Mở sẵn các file quan trọng trong VS Code / IntelliJ:**
   - [ ] Backend: `SystemAccountService.java`, `CategoryService.java`, `NewsArticleService.java`, `NewsArticle.java`.
-  - [ ] Frontend: `api.js`, `App.jsx`, `NewsManagement.jsx`, `AccountManagement.jsx`.
+  - [ ] Frontend: `api.js`, `App.jsx`, `NewsManagementPage.jsx`, `AccountManagementPage.jsx`.
 - [ ] **5. Giữ tinh thần tự tin:** Trình bày rõ ràng theo khung `Purpose -> Trigger -> Process -> Output -> Constraint`.

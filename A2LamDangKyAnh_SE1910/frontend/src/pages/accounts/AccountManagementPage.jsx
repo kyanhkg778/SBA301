@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { accountService } from '../../services/api';
-import AccountModal from './AccountModal';
-import ConfirmModal from '../common/ConfirmModal';
+import AccountModal from '../../components/modals/AccountModal';
+import ConfirmModal from '../../components/common/ConfirmModal';
+import AlertBanner from '../../components/common/AlertBanner';
 
-export default function AccountManagement() {
+export default function AccountManagementPage() {
   const [accounts, setAccounts] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
@@ -115,21 +116,8 @@ export default function AccountManagement() {
       </div>
 
       {/* Notifications */}
-      {actionSuccess && (
-        <div className="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2 py-2" role="alert">
-          <i className="bi bi-check-circle-fill"></i>
-          <div>{actionSuccess}</div>
-          <button type="button" className="btn-close" onClick={() => setActionSuccess('')}></button>
-        </div>
-      )}
-
-      {actionError && (
-        <div className="alert alert-danger alert-dismissible fade show d-flex align-items-center gap-2 py-2" role="alert">
-          <i className="bi bi-exclamation-octagon-fill"></i>
-          <div>{actionError}</div>
-          <button type="button" className="btn-close" onClick={() => setActionError('')}></button>
-        </div>
-      )}
+      <AlertBanner type="success" message={actionSuccess} onClose={() => setActionSuccess('')} />
+      <AlertBanner type="danger" message={actionError} onClose={() => setActionError('')} />
 
       {/* Search Bar */}
       <div className="app-card p-3 mb-4">
@@ -210,7 +198,7 @@ export default function AccountManagement() {
         </div>
       </div>
 
-      {/* Popup Dialogs */}
+      {/* Reusable Popup Dialogs */}
       <AccountModal
         show={modalOpen}
         mode={modalMode}
@@ -231,4 +219,3 @@ export default function AccountManagement() {
     </div>
   );
 }
-

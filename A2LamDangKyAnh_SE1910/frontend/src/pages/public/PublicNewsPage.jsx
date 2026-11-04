@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { newsService, categoryService } from '../../services/api';
+import NewsDetailModal from '../../components/modals/NewsDetailModal';
+import AlertBanner from '../../components/common/AlertBanner';
 
-export default function PublicNewsView() {
+export default function PublicNewsPage() {
   const [articles, setArticles] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('ALL');
@@ -9,7 +11,7 @@ export default function PublicNewsView() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   
-  // Reading dialog modal
+  // Reusable Reading dialog modal
   const [readingArticle, setReadingArticle] = useState(null);
 
   useEffect(() => {
@@ -91,12 +93,7 @@ export default function PublicNewsView() {
       </div>
 
       {/* Error Feedback */}
-      {error && (
-        <div className="alert alert-danger d-flex align-items-center gap-2">
-          <i className="bi bi-exclamation-octagon-fill"></i>
-          <span>{error}</span>
-        </div>
-      )}
+      <AlertBanner type="danger" message={error} onClose={() => setError('')} />
 
       {/* Loading state */}
       {loading ? (
@@ -178,64 +175,11 @@ export default function PublicNewsView() {
         </div>
       )}
 
-      {/* Reading Article Modal */}
-      {readingArticle && (
-        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(15, 23, 42, 0.7)' }}>
-          <div className="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-            <div className="modal-content">
-              <div className="modal-header">
-                <div>
-                  <span className="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1 rounded-pill small mb-1">
-                    {readingArticle.category?.categoryName}
-                  </span>
-                  <h4 className="modal-title fw-bold text-dark mt-1">
-                    {readingArticle.newsTitle}
-                  </h4>
-                </div>
-                <button type="button" className="btn-close" onClick={() => setReadingArticle(null)}></button>
-              </div>
-
-              <div className="modal-body">
-                {readingArticle.headline && (
-                  <div className="lead fs-6 text-muted mb-3 fst-italic border-start border-3 border-primary ps-3 py-1">
-                    {readingArticle.headline}
-                  </div>
-                )}
-
-                <div className="d-flex flex-wrap gap-3 small text-secondary py-2 border-bottom mb-4">
-                  <span><i className="bi bi-person-circle me-1"></i> Author: <strong>{readingArticle.createdBy?.accountName}</strong></span>
-                  <span><i className="bi bi-clock me-1"></i> Published: <strong>{readingArticle.createdDate}</strong></span>
-                  {readingArticle.newsSource && (
-                    <span><i className="bi bi-link-45deg me-1"></i> Source: <strong>{readingArticle.newsSource}</strong></span>
-                  )}
-                </div>
-
-                <div className="article-content text-dark" style={{ whiteSpace: 'pre-line', lineHeight: '1.8' }}>
-                  {readingArticle.newsContent}
-                </div>
-
-                {readingArticle.tags && readingArticle.tags.length > 0 && (
-                  <div className="mt-4 pt-3 border-top">
-                    <span className="fw-semibold small text-secondary me-2">Article Tags:</span>
-                    {readingArticle.tags.map(t => (
-                      <span key={t.tagId} className="tag-pill">
-                        #{t.tagName}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={() => setReadingArticle(null)}>
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Reusable Reading Modal */}
+      <NewsDetailModal
+        article={readingArticle}
+        onClose={() => setReadingArticle(null)}
+      />
     </div>
   );
 }
-

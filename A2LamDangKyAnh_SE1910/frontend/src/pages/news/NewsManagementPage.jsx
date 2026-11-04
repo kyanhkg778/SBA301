@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { newsService, categoryService } from '../../services/api';
-import NewsModal from './NewsModal';
-import ConfirmModal from '../common/ConfirmModal';
+import NewsModal from '../../components/modals/NewsModal';
+import NewsDetailModal from '../../components/modals/NewsDetailModal';
+import ConfirmModal from '../../components/common/ConfirmModal';
+import AlertBanner from '../../components/common/AlertBanner';
 
-export default function NewsManagement({ currentUser }) {
+export default function NewsManagementPage({ currentUser }) {
   const [articles, setArticles] = useState([]);
   const [categories, setCategories] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -18,6 +20,9 @@ export default function NewsManagement({ currentUser }) {
   const [modalMode, setModalMode] = useState('create');
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
+
+  // Preview Modal state
+  const [previewArticle, setPreviewArticle] = useState(null);
 
   // Confirm delete modal state
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -136,21 +141,8 @@ export default function NewsManagement({ currentUser }) {
       </div>
 
       {/* Notifications */}
-      {actionSuccess && (
-        <div className="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2 py-2" role="alert">
-          <i className="bi bi-check-circle-fill"></i>
-          <div>{actionSuccess}</div>
-          <button type="button" className="btn-close" onClick={() => setActionSuccess('')}></button>
-        </div>
-      )}
-
-      {actionError && (
-        <div className="alert alert-danger alert-dismissible fade show d-flex align-items-center gap-2 py-2" role="alert">
-          <i className="bi bi-exclamation-octagon-fill"></i>
-          <div>{actionError}</div>
-          <button type="button" className="btn-close" onClick={() => setActionError('')}></button>
-        </div>
-      )}
+      <AlertBanner type="success" message={actionSuccess} onClose={() => setActionSuccess('')} />
+      <AlertBanner type="danger" message={actionError} onClose={() => setActionError('')} />
 
       {/* Filter and Search Bar */}
       <div className="app-card p-3 mb-4">
@@ -268,6 +260,13 @@ export default function NewsManagement({ currentUser }) {
                     <td className="text-end">
                       <div className="btn-group btn-group-sm">
                         <button
+                          className="btn btn-outline-info"
+                          onClick={() => setPreviewArticle(item)}
+                          title="Preview Article"
+                        >
+                          <i className="bi bi-eye"></i> View
+                        </button>
+                        <button
                           className="btn btn-outline-primary"
                           onClick={() => handleOpenEdit(item)}
                           title="Edit Article"
@@ -291,7 +290,7 @@ export default function NewsManagement({ currentUser }) {
         </div>
       </div>
 
-      {/* Popup Dialogs */}
+      {/* Reusable Popup Dialogs */}
       <NewsModal
         show={modalOpen}
         mode={modalMode}
@@ -300,6 +299,12 @@ export default function NewsManagement({ currentUser }) {
         onClose={() => setModalOpen(false)}
         onSave={handleSaveArticle}
         isSaving={isSaving}
+      />
+
+      {/* Reusable Reading Modal */}
+      <NewsDetailModal
+        article={previewArticle}
+        onClose={() => setPreviewArticle(null)}
       />
 
       <ConfirmModal
@@ -313,4 +318,3 @@ export default function NewsManagement({ currentUser }) {
     </div>
   );
 }
-

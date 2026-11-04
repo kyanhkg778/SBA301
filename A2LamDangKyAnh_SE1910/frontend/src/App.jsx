@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Navbar from './components/common/Navbar';
-import LoginModal from './components/auth/LoginModal';
-import PublicNewsView from './components/public/PublicNewsView';
-import AccountManagement from './components/accounts/AccountManagement';
-import CategoryManagement from './components/categories/CategoryManagement';
-import NewsManagement from './components/news/NewsManagement';
-import ProfileManagement from './components/profile/ProfileManagement';
-import NewsHistory from './components/profile/NewsHistory';
+import Footer from './components/common/Footer';
+import LoginModal from './components/modals/LoginModal';
+import PublicNewsPage from './pages/public/PublicNewsPage';
+import AccountManagementPage from './pages/accounts/AccountManagementPage';
+import CategoryManagementPage from './pages/categories/CategoryManagementPage';
+import NewsManagementPage from './pages/news/NewsManagementPage';
+import NewsHistoryPage from './pages/profile/NewsHistoryPage';
+import ProfilePage from './pages/profile/ProfilePage';
 
 const AUTH_STORAGE_KEY = 'funews_current_user';
 
@@ -47,7 +48,7 @@ export default function App() {
 
   return (
     <div className="d-flex flex-column min-vh-100">
-      {/* Top Navbar */}
+      {/* Reusable Top Navbar */}
       <Navbar
         currentUser={currentUser}
         activeTab={activeTab}
@@ -56,29 +57,25 @@ export default function App() {
         onLogout={handleLogout}
       />
 
-      {/* Main Content Area */}
+      {/* Main Content Area (Pages) */}
       <main className="flex-grow-1">
-        {activeTab === 'public' && <PublicNewsView />}
-        {activeTab === 'accounts' && currentUser?.accountRole === 1 && <AccountManagement />}
-        {activeTab === 'news' && currentUser?.accountRole === 2 && <NewsManagement currentUser={currentUser} />}
-        {activeTab === 'categories' && currentUser?.accountRole === 2 && <CategoryManagement />}
-        {activeTab === 'history' && currentUser?.accountRole === 2 && <NewsHistory currentUser={currentUser} />}
+        {activeTab === 'public' && <PublicNewsPage />}
+        {activeTab === 'accounts' && currentUser?.accountRole === 1 && <AccountManagementPage />}
+        {activeTab === 'news' && currentUser?.accountRole === 2 && <NewsManagementPage currentUser={currentUser} />}
+        {activeTab === 'categories' && currentUser?.accountRole === 2 && <CategoryManagementPage />}
+        {activeTab === 'history' && currentUser?.accountRole === 2 && <NewsHistoryPage currentUser={currentUser} />}
         {activeTab === 'profile' && currentUser?.accountRole === 2 && (
-          <ProfileManagement
+          <ProfilePage
             currentUser={currentUser}
             onProfileUpdated={handleProfileUpdated}
           />
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="bg-white border-top py-3 text-center text-muted small mt-auto">
-        <div className="container">
-          <span>FUNewsManagementSystem &bull; Assignment 02 SBA301 &bull; Student: <strong>LamDangKyAnh</strong> (Class: <strong>SE1910</strong>)</span>
-        </div>
-      </footer>
+      {/* Reusable Footer */}
+      <Footer />
 
-      {/* Authentication Modal */}
+      {/* Reusable Authentication Modal */}
       <LoginModal
         show={loginModalOpen}
         onClose={() => setLoginModalOpen(false)}
@@ -87,4 +84,3 @@ export default function App() {
     </div>
   );
 }
-

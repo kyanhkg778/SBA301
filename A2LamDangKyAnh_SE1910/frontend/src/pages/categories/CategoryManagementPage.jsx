@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { categoryService } from '../../services/api';
-import CategoryModal from './CategoryModal';
-import ConfirmModal from '../common/ConfirmModal';
+import CategoryModal from '../../components/modals/CategoryModal';
+import ConfirmModal from '../../components/common/ConfirmModal';
+import AlertBanner from '../../components/common/AlertBanner';
 
-export default function CategoryManagement() {
+export default function CategoryManagementPage() {
   const [categories, setCategories] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
@@ -115,21 +116,8 @@ export default function CategoryManagement() {
       </div>
 
       {/* Notifications */}
-      {actionSuccess && (
-        <div className="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2 py-2" role="alert">
-          <i className="bi bi-check-circle-fill"></i>
-          <div>{actionSuccess}</div>
-          <button type="button" className="btn-close" onClick={() => setActionSuccess('')}></button>
-        </div>
-      )}
-
-      {actionError && (
-        <div className="alert alert-danger alert-dismissible fade show d-flex align-items-center gap-2 py-2" role="alert">
-          <i className="bi bi-exclamation-octagon-fill"></i>
-          <div>{actionError}</div>
-          <button type="button" className="btn-close" onClick={() => setActionError('')}></button>
-        </div>
-      )}
+      <AlertBanner type="success" message={actionSuccess} onClose={() => setActionSuccess('')} />
+      <AlertBanner type="danger" message={actionError} onClose={() => setActionError('')} />
 
       {/* Search Bar */}
       <div className="app-card p-3 mb-4">
@@ -210,7 +198,7 @@ export default function CategoryManagement() {
         </div>
       </div>
 
-      {/* Popup Dialogs */}
+      {/* Reusable Popup Dialogs */}
       <CategoryModal
         show={modalOpen}
         mode={modalMode}
@@ -231,4 +219,3 @@ export default function CategoryManagement() {
     </div>
   );
 }
-

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { newsService } from '../../services/api';
+import NewsDetailModal from '../../components/modals/NewsDetailModal';
+import AlertBanner from '../../components/common/AlertBanner';
 
-export default function NewsHistory({ currentUser }) {
+export default function NewsHistoryPage({ currentUser }) {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -62,12 +64,7 @@ export default function NewsHistory({ currentUser }) {
         </div>
       </div>
 
-      {error && (
-        <div className="alert alert-danger py-2 d-flex align-items-center gap-2 mb-4">
-          <i className="bi bi-exclamation-octagon-fill"></i>
-          <span>{error}</span>
-        </div>
-      )}
+      <AlertBanner type="danger" message={error} onClose={() => setError('')} />
 
       {/* History Table */}
       <div className="app-card overflow-hidden">
@@ -153,47 +150,11 @@ export default function NewsHistory({ currentUser }) {
         </div>
       </div>
 
-      {/* Preview Dialog */}
-      {previewArticle && (
-        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(15, 23, 42, 0.7)' }}>
-          <div className="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-            <div className="modal-content">
-              <div className="modal-header">
-                <div>
-                  <span className="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1 rounded-pill small mb-1">
-                    {previewArticle.category?.categoryName}
-                  </span>
-                  <h5 className="modal-title fw-bold text-dark mt-1">
-                    {previewArticle.newsTitle}
-                  </h5>
-                </div>
-                <button type="button" className="btn-close" onClick={() => setPreviewArticle(null)}></button>
-              </div>
-              <div className="modal-body">
-                {previewArticle.headline && (
-                  <p className="fst-italic text-muted border-start border-3 border-info ps-3">
-                    {previewArticle.headline}
-                  </p>
-                )}
-                <div className="small text-secondary mb-3 d-flex gap-3">
-                  <span><strong>ID:</strong> {previewArticle.newsArticleId}</span>
-                  <span><strong>Status:</strong> {previewArticle.newsStatus ? 'Published' : 'Draft'}</span>
-                  <span><strong>Created:</strong> {previewArticle.createdDate}</span>
-                </div>
-                <div style={{ whiteSpace: 'pre-line', lineHeight: '1.7' }}>
-                  {previewArticle.newsContent}
-                </div>
-              </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={() => setPreviewArticle(null)}>
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Reusable Preview Dialog */}
+      <NewsDetailModal
+        article={previewArticle}
+        onClose={() => setPreviewArticle(null)}
+      />
     </div>
   );
 }
-
