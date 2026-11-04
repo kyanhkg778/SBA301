@@ -18,15 +18,11 @@ export default function PublicNewsPage() {
     loadData();
   }, []);
 
-  // =========================================================================
-  // [LUỒNG 1 - DÒNG CODE CHÍNH]: GỌI API LẤY TIN TỨC ACTIVE CÔNG KHAI (GUEST KHÔNG CẦN LOGIN)
-  // Luồng: Gọi song song newsService.getPublic() và categoryService.getActive()
-  // =========================================================================
+  // [Luồng 1]: Tải tin tức active công khai và danh mục
   const loadData = async () => {
     try {
       setLoading(true);
       setError('');
-      // DÒNG CODE CHÍNH 1: Gọi song song 2 API lấy bài viết công khai & danh mục Active
       const [newsData, catData] = await Promise.all([
         newsService.getPublic(),
         categoryService.getActive()
@@ -40,15 +36,9 @@ export default function PublicNewsPage() {
     }
   };
 
-  // =========================================================================
-  // [LUỒNG 1 - DÒNG CODE CHÍNH]: BỘ LỌC TÌM KIẾM ĐA NĂNG PHÍA CLIENT
-  // Lọc theo Category được chọn và tìm kiếm keyword trong Title, Headline, Content, Source
-  // =========================================================================
+  // [Luồng 1]: Lọc theo Category và từ khóa tìm kiếm
   const filteredArticles = articles.filter(item => {
-    // DÒNG CODE CHÍNH 2: Kiểm tra Category ID trùng khớp hoặc xem tất cả ('ALL')
     const matchesCategory = selectedCategory === 'ALL' || item.category?.categoryId?.toString() === selectedCategory.toString();
-    
-    // DÒNG CODE CHÍNH 3: Kiểm tra từ khóa trong Title, Headline, Content hoặc Nguồn tin
     const matchesQuery = !searchQuery.trim() || 
       item.newsTitle?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.headline?.toLowerCase().includes(searchQuery.toLowerCase()) ||

@@ -46,14 +46,11 @@ export default function NewsManagementPage({ currentUser }) {
     }
   };
 
-  // =========================================================================
-  // [LUỒNG 5 - DÒNG CODE CHÍNH]: LOAD TẤT CẢ BÀI VIẾT VỚI BỘ LỌC TÌM KIẾM TỪ SERVER
-  // =========================================================================
+  // [Luồng 5]: Tải danh sách bài viết theo bộ lọc
   const loadNews = async () => {
     try {
       setLoading(true);
       const params = {};
-      // DÒNG CODE CHÍNH 1: Gắn các query param (keyword, category, status)
       if (searchQuery.trim()) params.query = searchQuery.trim();
       if (selectedCategory) params.categoryId = selectedCategory;
       if (selectedStatus !== '') params.status = selectedStatus === 'true';
@@ -83,20 +80,15 @@ export default function NewsManagementPage({ currentUser }) {
     setActionSuccess('');
   };
 
-  // =========================================================================
-  // [LUỒNG 5 - DÒNG CODE CHÍNH]: TẠO MỚI HOẶC CẬP NHẬT BÀI VIẾT KÈM TAG IDS
-  // Dữ liệu formData bao gồm: title, headline, content, categoryId, newsStatus, tagIds: [1, 2, ...]
-  // =========================================================================
+  // [Luồng 5]: Tạo mới hoặc cập nhật bài viết kèm tags
   const handleSaveArticle = async (formData) => {
     try {
       setIsSaving(true);
       setActionError('');
       if (modalMode === 'create') {
-        // DÒNG CODE CHÍNH 2: Tạo bài viết mới kèm danh sách Tag IDs liên kết
         await newsService.create(formData);
         setActionSuccess(`News article '${formData.newsTitle}' created successfully.`);
       } else {
-        // DÒNG CODE CHÍNH 3: Cập nhật bài viết và đồng bộ lại danh sách Tag liên kết
         await newsService.update(selectedArticle.newsArticleId, formData);
         setActionSuccess(`News article '${formData.newsTitle}' updated successfully.`);
       }
@@ -116,20 +108,16 @@ export default function NewsManagementPage({ currentUser }) {
     setActionSuccess('');
   };
 
-  // =========================================================================
-  // [LUỒNG 5 - DÒNG CODE CHÍNH]: XÓA BÀI VIẾT (CASCADE XÓA BẢN GHI LIÊN KẾT TRONG NEWS_TAG)
-  // =========================================================================
+  // [Luồng 5]: Xóa bài viết (cascade xóa liên kết trong bảng NewsTag)
   const handleConfirmDelete = async () => {
     if (!articleToDelete) return;
     try {
       setIsDeleting(true);
       setActionError('');
-      // DÒNG CODE CHÍNH 4: Gửi DELETE request tới Backend
       await newsService.delete(articleToDelete.newsArticleId);
       setActionSuccess(`Article '${articleToDelete.newsTitle}' deleted successfully.`);
       setConfirmOpen(false);
       setArticleToDelete(null);
-      // DÒNG CODE CHÍNH 5: Refresh danh sách sau khi xóa
       loadNews();
     } catch (err) {
       setActionError(err.message);

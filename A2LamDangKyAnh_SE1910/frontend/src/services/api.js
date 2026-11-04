@@ -1,11 +1,6 @@
 import axios from 'axios';
 
-// =========================================================================
-// [KIẾN TRÚC CLIENT - AXIOS SERVICE LAYER]: TẬP TRUNG HÓA GIAO TIẾP HTTP & XỬ LÝ LỖI
-// Tách biệt hoàn toàn tầng giao tiếp mạng khỏi các component giao diện (UI).
-// =========================================================================
-
-// Base API URL trỏ tới Spring Boot 3 Backend
+// Axios client & xử lý lỗi tập trung
 const API_BASE_URL = 'http://localhost:8080/api';
 
 const apiClient = axios.create({
@@ -15,8 +10,7 @@ const apiClient = axios.create({
   }
 });
 
-// [HÀM BÓC TÁCH LỖI TẬP TRUNG]: Tự động lấy message nghiệp vụ từ Spring Boot (400, 401, 500)
-// Nếu server trả về validation errors { details: { field: msg } }, hàm sẽ ghép chuỗi trực quan.
+// Xử lý message lỗi từ backend (400, 401, 500)
 const handleApiError = (error) => {
   if (error.response && error.response.data) {
     const data = error.response.data;

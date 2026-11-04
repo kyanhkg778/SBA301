@@ -81,25 +81,19 @@ export default function AccountManagementPage() {
     setActionSuccess('');
   };
 
-  // =========================================================================
-  // [LUỒNG 3 - DÒNG CODE CHÍNH]: THỰC HIỆN XÓA TÀI KHOẢN VÀ XỬ LÝ RÀNG BUỘC TỪ BACKEND
-  // Luồng: Admin xác nhận xóa -> Gửi DELETE /api/accounts/{id} -> Nếu có tin tức, Backend ném 400
-  // và error interceptor trả về err.message hiển thị trực tiếp lên AlertBanner
-  // =========================================================================
+  // [Luồng 3]: Xóa tài khoản & xử lý lỗi ràng buộc từ backend
   const handleConfirmDelete = async () => {
     if (!accountToDelete) return;
     try {
       setIsDeleting(true);
       setActionError('');
-      // DÒNG CODE CHÍNH 1: Gọi API xóa tài khoản
       await accountService.delete(accountToDelete.accountId);
       setActionSuccess(`Account '${accountToDelete.accountName}' deleted successfully.`);
       setConfirmOpen(false);
       setAccountToDelete(null);
-      // DÒNG CODE CHÍNH 2: Tải lại danh sách sau khi xóa thành công
       loadAccounts();
     } catch (err) {
-      // DÒNG CODE CHÍNH 3: Bắt thông báo lỗi ràng buộc "Cannot delete account that has created articles..."
+      // Hiển thị lỗi ràng buộc (tài khoản đã tạo bài viết)
       setActionError(err.message);
       setConfirmOpen(false);
     } finally {

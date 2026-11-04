@@ -15,15 +15,11 @@ export default function NewsHistoryPage({ currentUser }) {
     }
   }, [currentUser]);
 
-  // =========================================================================
-  // [LUỒNG 6 - DÒNG CODE CHÍNH]: LẤY LỊCH SỬ BÀI VIẾT DO CHÍNH TÀI KHOẢN STAFF NÀY TẠO RA
-  // Luồng: Lấy accountId từ session currentUser -> Gọi GET /api/news/history?staffId={id}
-  // =========================================================================
+  // [Luồng 6]: Tải lịch sử bài viết do chính staff đang đăng nhập tạo ra
   const loadHistory = async () => {
     try {
       setLoading(true);
       setError('');
-      // DÒNG CODE CHÍNH: Gọi API lấy các bài viết có createdBy.accountId == currentUser.accountId
       const data = await newsService.getStaffHistory(currentUser.accountId);
       setHistory(data);
     } catch (err) {

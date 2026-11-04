@@ -9,10 +9,7 @@ export default function LoginModal({ show, onClose, onLoginSuccess }) {
 
   if (!show) return null;
 
-  // =========================================================================
-  // [LUỒNG 2 - DÒNG CODE CHÍNH]: GỬI CREDENTIALS QUA AUTH SERVICE ĐỂ ĐĂNG NHẬP
-  // Luồng: Validate input -> Gọi POST /api/auth/login -> Nhận User info -> Cập nhật State
-  // =========================================================================
+  // [Luồng 2]: Gửi thông tin đăng nhập và lưu session theo role
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -24,10 +21,7 @@ export default function LoginModal({ show, onClose, onLoginSuccess }) {
 
     try {
       setLoading(true);
-      // DÒNG CODE CHÍNH 1: Gửi request xác thực lên Backend qua Axios
       const user = await authService.login(email.trim(), password);
-      
-      // DÒNG CODE CHÍNH 2: Lưu phiên đăng nhập & phân quyền (Admin role=1, Staff role=2)
       onLoginSuccess(user);
       onClose();
     } catch (err) {
