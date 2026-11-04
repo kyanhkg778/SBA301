@@ -70,18 +70,25 @@ public class CategoryService {
         return categoryRepository.save(existing);
     }
 
+    // =========================================================================
+    // [LUỒNG 4 - DÒNG CODE CHÍNH]: RÀNG BUỘC XÓA DANH MỤC CỦA STAFF (Business Constraint)
+    // Đặc tả PDF: "The delete action will delete an item in the case this item
+    // is not belong to any news articles. If the item is already stored in a news article cannot delete."
+    // =========================================================================
     @Transactional
     public void deleteCategory(Short id) {
         Category existing = getCategoryById(id);
 
-        // PDF Business Rule:
-        // "The delete action will delete an item in the case this item is not belong to any news articles.
-        // If the item is already stored in a news article cannot delete."
-        if (newsArticleRepository.existsByCategory_CategoryId(id)) {
+        // [BƯỚC 1 - KIỂM TRA KHÓA NGOẠI]: Kiểm tra xem danh mục này có đang chứa bài viết nào không
+        boolean isUsedInNews = newsArticleRepository.existsByCategory_CategoryId(id);
+
+        // [BƯỚC 2 - CHẶN XÓA]: Nếu đang có bài viết sử dụng -> ném lỗi HTTP 400 Bad Request
+        if (isUsedInNews) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Cannot delete category: Category '" + existing.getCategoryName() + "' (ID: " + id + ") is currently assigned to one or more news articles.");
         }
 
+        // [BƯỚC 3 - XÓA AN TOÀN]: Chỉ xóa khi không có bài viết nào liên kết
         categoryRepository.delete(existing);
     }
 }

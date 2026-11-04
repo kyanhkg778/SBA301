@@ -67,18 +67,25 @@ public class SystemAccountService {
         return accountRepository.save(existing);
     }
 
+    // =========================================================================
+    // [LUỒNG 3 - DÒNG CODE CHÍNH]: RÀNG BUỘC XÓA TÀI KHOẢN CỦA ADMIN (Business Constraint)
+    // Đặc tả PDF: "the delete action will delete an account in the case this account
+    // is not belong to any news articles (created), if already created, cannot delete."
+    // =========================================================================
     @Transactional
     public void deleteAccount(Short id) {
         SystemAccount existing = getAccountById(id);
 
-        // PDF Business Rule:
-        // "the delete action will delete an account in the case this account is not belong to any news articles (created),
-        // if the account is already created any news article, cannot delete."
-        if (newsArticleRepository.existsByCreatedBy_AccountId(id)) {
+        // [BƯỚC 1 - KIỂM TRA KHÓA NGOẠI]: Truy vấn xem tài khoản này đã từng là tác giả bài viết nào chưa
+        boolean hasAuthoredNews = newsArticleRepository.existsByCreatedBy_AccountId(id);
+
+        // [BƯỚC 2 - CHẶN XÓA]: Nếu đã tạo bài viết -> ném lỗi HTTP 400 Bad Request
+        if (hasAuthoredNews) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Cannot delete account: Account '" + existing.getAccountName() + "' (ID: " + id + ") has already created news articles in the system.");
         }
 
+        // [BƯỚC 3 - XÓA AN TOÀN]: Chỉ khi chưa từng tạo bài viết mới cho phép xóa khỏi Database
         accountRepository.delete(existing);
     }
 
