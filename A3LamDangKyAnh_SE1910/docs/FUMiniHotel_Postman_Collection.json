@@ -1,0 +1,357 @@
+{
+  "info": {
+    "_postman_id": "a3-fuminihotel-se1910-id",
+    "name": "FUMiniHotel API - SBA301 Assignment 03",
+    "description": "Postman Collection for Securing REST Services with Spring Boot (SBA301 Assignment 03) - Lam Dang Ky Anh (SE1910)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Authentication (Public)",
+      "item": [
+        {
+          "name": "Staff Login (application.properties)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"staff@fuminihotel.com\",\n  \"password\": \"staff123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Customer Login (Database)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"customer@fuminihotel.com\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Customer Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerFullName\": \"Le Van Cuong\",\n  \"telephone\": \"0988776655\",\n  \"emailAddress\": \"cuong.le@example.com\",\n  \"customerBirthday\": \"1999-09-19\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Get Current User Profile (/me)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/auth/me",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "auth", "me"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Rooms (Public View & Staff CRUD)",
+      "item": [
+        {
+          "name": "Get Active Rooms (Public - No Auth Required)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/api/rooms",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "rooms"]
+            }
+          }
+        },
+        {
+          "name": "Search Rooms (Public)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/api/rooms?query=Deluxe&minPrice=500000&maxPrice=1000000",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "rooms"],
+              "query": [
+                { "key": "query", "value": "Deluxe" },
+                { "key": "minPrice", "value": "500000" },
+                { "key": "maxPrice", "value": "1000000" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Room By ID (Public)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/api/rooms/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "rooms", "1"]
+            }
+          }
+        },
+        {
+          "name": "Staff: Create Room",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{staff_jwt}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roomNumber\": \"501\",\n  \"roomDetailDescription\": \"Phòng Penthouse view toàn cảnh thành phố\",\n  \"roomMaxCapacity\": 4,\n  \"roomTypeId\": 3,\n  \"roomStatus\": 1,\n  \"roomPricePerDay\": 2200000.00\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/rooms",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "rooms"]
+            }
+          }
+        },
+        {
+          "name": "Staff: Update Room",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{staff_jwt}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roomNumber\": \"501\",\n  \"roomDetailDescription\": \"Phòng Penthouse cao cấp có ban công riêng\",\n  \"roomMaxCapacity\": 4,\n  \"roomTypeId\": 3,\n  \"roomStatus\": 1,\n  \"roomPricePerDay\": 2500000.00\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/rooms/501",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "rooms", "501"]
+            }
+          }
+        },
+        {
+          "name": "Staff: Delete Room (Special Rule: Soft-delete if in booking detail)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{staff_jwt}}" }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/rooms/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "rooms", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Customer Operations (Customer Role)",
+      "item": [
+        {
+          "name": "Customer: View Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{customer_jwt}}" }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/customer/profile",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "customer", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Customer: Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{customer_jwt}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerFullName\": \"Nguyen Van An (VIP)\",\n  \"telephone\": \"0909999888\",\n  \"customerBirthday\": \"1998-05-20\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/customer/profile",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "customer", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Customer: Create Online Booking (1 or Multiple Rooms)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{customer_jwt}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bookingDate\": \"2026-11-04\",\n  \"bookingStatus\": 1,\n  \"items\": [\n    {\n      \"roomId\": 3,\n      \"startDate\": \"2026-11-15\",\n      \"endDate\": \"2026-11-17\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/bookings",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "bookings"]
+            }
+          }
+        },
+        {
+          "name": "Customer: View Booking Reservation History",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{customer_jwt}}" }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/bookings/my-history",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "bookings", "my-history"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Staff Operations (Staff Role)",
+      "item": [
+        {
+          "name": "Staff: List / Search Customers",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{staff_jwt}}" }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/staff/customers",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "staff", "customers"]
+            }
+          }
+        },
+        {
+          "name": "Staff: Create Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{staff_jwt}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerFullName\": \"Pham Quoc Bao\",\n  \"telephone\": \"0933445566\",\n  \"emailAddress\": \"bao.pham@example.com\",\n  \"customerBirthday\": \"1992-03-12\",\n  \"customerStatus\": 1,\n  \"password\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/staff/customers",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "staff", "customers"]
+            }
+          }
+        },
+        {
+          "name": "Staff: List / Filter All Bookings",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{staff_jwt}}" }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/staff/bookings",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "staff", "bookings"]
+            }
+          }
+        },
+        {
+          "name": "Staff: Update Booking Status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{staff_jwt}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bookingStatus\": 2\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/staff/bookings/1/status",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "staff", "bookings", "1", "status"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
+
