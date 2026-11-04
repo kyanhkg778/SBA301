@@ -81,17 +81,25 @@ export default function CategoryManagementPage() {
     setActionSuccess('');
   };
 
+  // =========================================================================
+  // [LUỒNG 4 - DÒNG CODE CHÍNH]: THỰC HIỆN XÓA CATEGORY VÀ BẮT RÀNG BUỘC TỪ BACKEND
+  // Luồng: Staff xác nhận xóa -> Gửi DELETE /api/categories/{id} -> Nếu đang chứa bài viết
+  // hoặc danh mục con, Backend ném 400 Bad Request kèm message rõ ràng
+  // =========================================================================
   const handleConfirmDelete = async () => {
     if (!categoryToDelete) return;
     try {
       setIsDeleting(true);
       setActionError('');
+      // DÒNG CODE CHÍNH 1: Gửi DELETE request tới API Backend
       await categoryService.delete(categoryToDelete.categoryId);
       setActionSuccess(`Category '${categoryToDelete.categoryName}' deleted successfully.`);
       setConfirmOpen(false);
       setCategoryToDelete(null);
+      // DÒNG CODE CHÍNH 2: Tải lại danh sách danh mục
       loadCategories();
     } catch (err) {
+      // DÒNG CODE CHÍNH 3: Bắt lỗi ràng buộc "Cannot delete category that is currently assigned to news articles"
       setActionError(err.message);
       setConfirmOpen(false);
     } finally {
@@ -219,3 +227,4 @@ export default function CategoryManagementPage() {
     </div>
   );
 }
+

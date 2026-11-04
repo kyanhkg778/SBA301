@@ -1,6 +1,11 @@
 import axios from 'axios';
 
-// Base API URL pointing to the Spring Boot RESTful Web Service
+// =========================================================================
+// [KIẾN TRÚC CLIENT - AXIOS SERVICE LAYER]: TẬP TRUNG HÓA GIAO TIẾP HTTP & XỬ LÝ LỖI
+// Tách biệt hoàn toàn tầng giao tiếp mạng khỏi các component giao diện (UI).
+// =========================================================================
+
+// Base API URL trỏ tới Spring Boot 3 Backend
 const API_BASE_URL = 'http://localhost:8080/api';
 
 const apiClient = axios.create({
@@ -10,7 +15,8 @@ const apiClient = axios.create({
   }
 });
 
-// Response error handler helper
+// [HÀM BÓC TÁCH LỖI TẬP TRUNG]: Tự động lấy message nghiệp vụ từ Spring Boot (400, 401, 500)
+// Nếu server trả về validation errors { details: { field: msg } }, hàm sẽ ghép chuỗi trực quan.
 const handleApiError = (error) => {
   if (error.response && error.response.data) {
     const data = error.response.data;
@@ -25,7 +31,7 @@ const handleApiError = (error) => {
 };
 
 // ==========================================
-// 1. AUTH SERVICE
+// [LUỒNG 2]: AUTH SERVICE (ĐĂNG NHẬP THÀNH VIÊN)
 // ==========================================
 export const authService = {
   login: async (email, password) => {

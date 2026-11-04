@@ -23,3 +23,4 @@ export default function AlertBanner({ type = 'danger', message, onClose }) {
     </div>
   );
 }
+
